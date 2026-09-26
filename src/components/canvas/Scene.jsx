@@ -14,7 +14,7 @@ import { CommandTerminal } from './models/CommandTerminal';
 import { useScrollProgress } from '../../context/ScrollContext';
 
 function SceneContent() {
-  const { scrollProgress, setSelectedProject } = useScrollProgress();
+  const { scrollProgress, setSelectedProject, wireframeMode } = useScrollProgress();
 
   return (
     <>
@@ -23,16 +23,20 @@ function SceneContent() {
 
       {/* Atmospheric Environment */}
       <CyberGridFloor />
-      <DataParticles count={650} />
+      <DataParticles count={wireframeMode ? 900 : 650} />
 
       {/* Section 1: Hero Gateway Blast Door */}
-      <BlastDoor progress={scrollProgress.current} position={[0, 0, 7.5]} />
+      <BlastDoor
+        progress={scrollProgress.current}
+        position={[0, 0, 7.5]}
+        wireframe={wireframeMode}
+      />
 
       {/* Section 2: About Control Room */}
-      <ControlRoom position={[-3.5, 0, 0]} />
+      <ControlRoom position={[-3.5, 0, 0]} wireframe={wireframeMode} />
 
       {/* Section 3: Skills Server Aisle */}
-      <ServerAisle position={[0, 0, -8]} />
+      <ServerAisle position={[0, 0, -8]} wireframe={wireframeMode} />
 
       {/* Inter-Rack Fiber Optic Data Conduits */}
       <GlowingConduit
@@ -42,7 +46,7 @@ function SceneContent() {
           [1.5, 4.0, -9],
           [3.0, 3.8, -8],
         ]}
-        color="#00f0ff"
+        color={wireframeMode ? '#00ff88' : '#00f0ff'}
         pulseSpeed={3.5}
       />
       <GlowingConduit
@@ -52,7 +56,7 @@ function SceneContent() {
           [-1.0, 4.1, -13],
           [-3.0, 3.8, -12],
         ]}
-        color="#ff007f"
+        color={wireframeMode ? '#00ff44' : '#ff007f'}
         pulseSpeed={2.8}
       />
       <GlowingConduit
@@ -72,7 +76,7 @@ function SceneContent() {
       />
 
       {/* Section 5 & 6: Contact Command Terminal */}
-      <CommandTerminal position={[0, 0, -25]} />
+      <CommandTerminal position={[0, 0, -25]} wireframe={wireframeMode} />
 
       {/* Postprocessing Pass */}
       <Effects />
@@ -85,6 +89,10 @@ function SceneContent() {
 }
 
 export function Scene() {
+  const { wireframeMode } = useScrollProgress();
+  const bgColor = wireframeMode ? '#020c08' : '#07090e';
+  const fogColor = wireframeMode ? '#020c08' : '#07090e';
+
   return (
     <div className="fixed inset-0 z-0 pointer-events-none w-screen h-screen">
       <Canvas
@@ -97,15 +105,29 @@ export function Scene() {
         }}
         camera={{ fov: 45, near: 0.1, far: 80, position: [0, 2.2, 13] }}
       >
-        <color attach="background" args={['#07090e']} />
-        <fog attach="fog" args={['#07090e', 10, 38]} />
+        <color attach="background" args={[bgColor]} />
+        <fog attach="fog" args={[fogColor, 10, 38]} />
 
         {/* Ambient & Rim Lighting */}
-        <ambientLight intensity={0.4} />
-        <directionalLight position={[10, 15, 8]} intensity={0.8} color="#4570ff" />
-        <pointLight position={[0, 3.5, 5]} intensity={4.0} color="#00f0ff" distance={15} />
+        <ambientLight intensity={wireframeMode ? 0.7 : 0.4} />
+        <directionalLight
+          position={[10, 15, 8]}
+          intensity={0.8}
+          color={wireframeMode ? '#00ff88' : '#4570ff'}
+        />
+        <pointLight
+          position={[0, 3.5, 5]}
+          intensity={wireframeMode ? 6.0 : 4.0}
+          color={wireframeMode ? '#00ff88' : '#00f0ff'}
+          distance={15}
+        />
         <pointLight position={[-3.5, 3.0, 0]} intensity={3.5} color="#00ff88" distance={12} />
-        <pointLight position={[0, 3.0, -10]} intensity={3.0} color="#00f0ff" distance={15} />
+        <pointLight
+          position={[0, 3.0, -10]}
+          intensity={3.0}
+          color={wireframeMode ? '#00ff88' : '#00f0ff'}
+          distance={15}
+        />
         <pointLight position={[4.0, 3.0, -16]} intensity={3.5} color="#ff007f" distance={14} />
         <pointLight position={[0, 3.0, -24]} intensity={4.5} color="#00f0ff" distance={12} />
 

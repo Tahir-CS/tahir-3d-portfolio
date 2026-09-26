@@ -4,6 +4,8 @@ import { SmoothScrollProvider } from './providers/SmoothScrollProvider';
 import { Scene } from './components/canvas/Scene';
 import { Navigation } from './components/ui/Navigation';
 import { LoadingScreen } from './components/ui/LoadingScreen';
+import { CyberCursor } from './components/ui/CyberCursor';
+import { SciFiHudFrame } from './components/ui/SciFiHudFrame';
 import { HeroOverlay } from './components/ui/HeroOverlay';
 import { AboutOverlay } from './components/ui/AboutOverlay';
 import { SkillsOverlay } from './components/ui/SkillsOverlay';
@@ -18,13 +20,19 @@ function AppContent() {
 
   return (
     <div className="relative min-h-screen bg-[#07090e] text-white overflow-x-hidden selection:bg-cyan-500 selection:text-black">
+      {/* 0. Custom Sci-Fi Cursor (Desktop only) */}
+      <CyberCursor />
+
       {/* 1. Terminal Boot Loading Screen */}
       {!loaded && <LoadingScreen onLoaded={() => setLoaded(true)} />}
 
-      {/* 2. Fixed Floating Nav Bar */}
+      {/* 2. Fixed Telemetry HUD Frame */}
+      <SciFiHudFrame />
+
+      {/* 3. Fixed Floating Nav Bar */}
       <Navigation />
 
-      {/* 3. Fixed WebGL 3D Canvas Layer */}
+      {/* 4. Fixed WebGL 3D Canvas Layer */}
       <Scene />
 
       {/* 4. Physical Native/Lenis Scroll Container */}

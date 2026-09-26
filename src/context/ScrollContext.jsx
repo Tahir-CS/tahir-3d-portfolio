@@ -6,6 +6,8 @@ export function ScrollProvider({ children }) {
   const scrollProgress = useRef(0);
   const [activeSection, setActiveSection] = useState('hero');
   const [selectedProject, setSelectedProject] = useState(null);
+  const [wireframeMode, setWireframeMode] = useState(false);
+  const [scrollPercent, setScrollPercent] = useState(0);
 
   return (
     <ScrollContext.Provider
@@ -15,6 +17,10 @@ export function ScrollProvider({ children }) {
         setActiveSection,
         selectedProject,
         setSelectedProject,
+        wireframeMode,
+        setWireframeMode,
+        scrollPercent,
+        setScrollPercent,
       }}
     >
       {children}

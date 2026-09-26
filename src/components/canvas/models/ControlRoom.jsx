@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { HolographicMaterial } from '../../shaders/HolographicMaterial';
 
-export function ControlRoom({ position = [-3.5, 0, 0] }) {
+export function ControlRoom({ position = [-3.5, 0, 0], wireframe = false }) {
   const centralHoloRef = useRef();
 
   useFrame((_, delta) => {
@@ -17,7 +17,12 @@ export function ControlRoom({ position = [-3.5, 0, 0] }) {
       {/* Central Holographic Tactical Projector Deck */}
       <mesh position={[0, 0.25, 0]} castShadow receiveShadow>
         <cylinderGeometry args={[2.0, 2.4, 0.5, 8]} />
-        <meshStandardMaterial color="#0d1118" metalness={0.85} roughness={0.25} />
+        <meshStandardMaterial
+          color={wireframe ? '#00ff88' : '#0d1118'}
+          wireframe={wireframe}
+          metalness={0.85}
+          roughness={0.25}
+        />
       </mesh>
 
       {/* Recessed Emitter Ring */}

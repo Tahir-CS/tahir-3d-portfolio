@@ -6,7 +6,7 @@ const RACK_COUNT = 8;
 const LEDS_PER_RACK = 14;
 const TOTAL_LEDS = RACK_COUNT * LEDS_PER_RACK;
 
-export function ServerAisle({ position = [0, 0, -8] }) {
+export function ServerAisle({ position = [0, 0, -8], wireframe = false }) {
   const ledMeshRef = useRef();
   const dummy = useMemo(() => new THREE.Object3D(), []);
   const tempColor = useMemo(() => new THREE.Color(), []);
@@ -78,7 +78,8 @@ export function ServerAisle({ position = [0, 0, -8] }) {
             <mesh castShadow receiveShadow>
               <boxGeometry args={[1.05, 3.8, 1.4]} />
               <meshStandardMaterial
-                color="#0c0f16"
+                color={wireframe ? '#00ff88' : '#0c0f16'}
+                wireframe={wireframe}
                 roughness={0.35}
                 metalness={0.85}
               />
@@ -88,7 +89,8 @@ export function ServerAisle({ position = [0, 0, -8] }) {
             <mesh position={[isLeft ? 0.06 : -0.06, 0, 0]}>
               <boxGeometry args={[0.95, 3.65, 1.25]} />
               <meshStandardMaterial
-                color="#131822"
+                color={wireframe ? '#00cc66' : '#131822'}
+                wireframe={wireframe}
                 roughness={0.5}
                 metalness={0.7}
               />

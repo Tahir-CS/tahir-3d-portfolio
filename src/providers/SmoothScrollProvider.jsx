@@ -7,8 +7,21 @@ import { useScrollProgress } from '../context/ScrollContext';
 gsap.registerPlugin(ScrollTrigger);
 
 export function SmoothScrollProvider({ children }) {
-  const { scrollProgress, setActiveSection } = useScrollProgress();
+  const { scrollProgress, setActiveSection, setScrollPercent, setWireframeMode } = useScrollProgress();
   const lenisRef = useRef(null);
+
+  // Keyboard shortcut: Press 'D' to toggle Diagnostic Wireframe Mode
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'd' || e.key === 'D') {
+        // Only if not in an input
+        if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
+        setWireframeMode((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [setWireframeMode]);
 
   useEffect(() => {
     // 1. Initialize Lenis Smooth Scroll
@@ -39,6 +52,7 @@ export function SmoothScrollProvider({ children }) {
       scrub: 0.1,
       onUpdate: (self) => {
         scrollProgress.current = self.progress;
+        setScrollPercent(Math.round(self.progress * 100));
 
         // Dynamic section detection
         const p = self.progress;
@@ -57,7 +71,7 @@ export function SmoothScrollProvider({ children }) {
       lenis.destroy();
       lenisRef.current = null;
     };
-  }, [scrollProgress, setActiveSection]);
+  }, [scrollProgress, setActiveSection, setScrollPercent]);
 
   return children;
 }

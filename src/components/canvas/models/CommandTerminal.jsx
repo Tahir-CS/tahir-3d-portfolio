@@ -2,19 +2,29 @@ import React from 'react';
 import * as THREE from 'three';
 import { HolographicMaterial } from '../../shaders/HolographicMaterial';
 
-export function CommandTerminal({ position = [0, 0, -25] }) {
+export function CommandTerminal({ position = [0, 0, -25], wireframe = false }) {
   return (
     <group position={position}>
       {/* Central Pedestal Column */}
       <mesh position={[0, 0.6, 0]} castShadow>
         <cylinderGeometry args={[0.35, 0.55, 1.2, 8]} />
-        <meshStandardMaterial color="#0c0f16" metalness={0.85} roughness={0.25} />
+        <meshStandardMaterial
+          color={wireframe ? '#00ff88' : '#0c0f16'}
+          wireframe={wireframe}
+          metalness={0.85}
+          roughness={0.25}
+        />
       </mesh>
 
       {/* Console Top Desk Surface */}
       <mesh position={[0, 1.2, 0.2]} rotation={[-0.22, 0, 0]} castShadow receiveShadow>
         <boxGeometry args={[2.4, 0.08, 1.0]} />
-        <meshStandardMaterial color="#141923" metalness={0.9} roughness={0.2} />
+        <meshStandardMaterial
+          color={wireframe ? '#00cc66' : '#141923'}
+          wireframe={wireframe}
+          metalness={0.9}
+          roughness={0.2}
+        />
       </mesh>
 
       {/* Illuminated Cyber Keyboard / Deck Interface */}
