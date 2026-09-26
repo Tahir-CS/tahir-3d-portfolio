@@ -34,9 +34,13 @@ export function LoadingScreen({ onLoaded }) {
   }, []);
 
   const handleEnter = () => {
-    sound.init();
-    sound.toggleMute(); // Unmute and start ambient drone
-    sound.playHoloEngage();
+    try {
+      sound.init();
+      sound.toggleMute();
+      sound.playHoloEngage();
+    } catch {
+      // Audio context might fail on some browsers
+    }
     onLoaded?.();
   };
 

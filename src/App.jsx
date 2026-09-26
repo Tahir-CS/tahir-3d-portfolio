@@ -19,7 +19,7 @@ function AppContent() {
   const { selectedProject, setSelectedProject } = useScrollProgress();
 
   return (
-    <div className="relative min-h-screen bg-[#07090e] text-white overflow-x-hidden selection:bg-cyan-500 selection:text-black">
+    <div className="relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] overflow-x-hidden selection:bg-amber-500 selection:text-black transition-colors duration-500">
       {/* 0. Custom Sci-Fi Cursor (Desktop only) */}
       <CyberCursor />
 

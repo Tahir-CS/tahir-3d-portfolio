@@ -1,13 +1,14 @@
 import React from 'react';
-import { FolderGit2, ExternalLink, Eye, Cpu } from 'lucide-react';
+import { Eye, ExternalLink, ArrowDown } from 'lucide-react';
 import { portfolioConfig } from '../../config/portfolio.config';
-import { TechIcon, GithubIcon } from '../TechIcons';
+import { GithubIcon } from '../TechIcons';
 import { useScrollProgress } from '../../context/ScrollContext';
 import { sound } from '../../utils/soundEngine';
 
 export function ProjectsOverlay() {
   const { projects } = portfolioConfig;
-  const { setSelectedProject } = useScrollProgress();
+  const { setSelectedProject, theme } = useScrollProgress();
+  const isObsidian = theme === 'obsidian';
 
   const handleInspect = (proj) => {
     sound.playHoloEngage();
@@ -27,102 +28,109 @@ export function ProjectsOverlay() {
   return (
     <section
       id="projects"
-      className="min-h-screen flex items-center justify-center px-4 sm:px-8 py-20 pointer-events-none"
+      className="min-h-screen flex flex-col justify-between px-6 sm:px-12 lg:px-16 py-24 select-none pointer-events-none"
     >
-      <div className="max-w-5xl w-full pointer-events-auto space-y-6">
-        {/* Header */}
-        <div className="backdrop-blur-2xl bg-black/50 border border-white/10 p-6 sm:p-8 rounded-3xl shadow-2xl space-y-2">
-          <div className="flex items-center gap-2 font-mono text-xs text-yellow-400 uppercase tracking-widest">
-            <FolderGit2 className="w-4 h-4" />
-            <span>// ACTIVE_DEPLOYMENTS // NODE-04</span>
+      {/* Top Banner */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pointer-events-auto border-b border-[var(--hud-line)] pb-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-xs font-bold px-2.5 py-1 rounded bg-[var(--glass-surface)] border border-[var(--glass-border)] text-[var(--accent-gold)]">
+              04 // VERTICAL FREE-FALL
+            </span>
+            <span className="font-mono text-xs text-[var(--text-muted)] hidden sm:inline">
+              CAMERA DIVE: DESCENDING DOWN VERTICAL CHASM
+            </span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white uppercase tracking-tight">
-            Deployment Pipeline
+          <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)]">
+            Production Deployments
           </h2>
-          <p className="text-slate-400 text-xs sm:text-sm font-mono">
-            Interactive conveyor modules. Click any deployment to inspect full system architecture & UI preview.
-          </p>
         </div>
 
-        {/* Project Cards Deck */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="text-xs font-mono text-[var(--text-muted)] md:text-right">
+          <span>CLICK ANY 3D GLASS SLAB TO INSPECT SPEC</span>
+        </div>
+      </div>
+
+      {/* Main Flanks (Center is wide open for the 3D vertical falling slabs) */}
+      <div className="my-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pointer-events-auto">
+        {/* Left Flank: Interactive Project Selection List */}
+        <div className="lg:col-span-4 space-y-2.5">
+          <span className="font-mono text-[11px] text-[var(--accent-gold)] uppercase tracking-wider block">
+            Select Deployment
+          </span>
           {projects.map((proj, idx) => (
             <div
               key={idx}
-              className="backdrop-blur-xl bg-black/50 border border-white/10 hover:border-cyan-500/40 p-6 rounded-3xl transition-all duration-300 hover:bg-black/70 flex flex-col justify-between space-y-4 group"
+              onClick={() => handleInspect(proj)}
+              className="apple-glass p-3.5 rounded-2xl cursor-pointer group transition-all duration-300 hover:scale-[1.02]"
             >
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs text-cyan-400 font-bold tracking-wider">
-                    MODULE_{proj.index}
-                  </span>
-                  <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-[10px] font-mono text-cyan-300">
-                    {proj.badge}
-                  </span>
-                </div>
-
-                <h3 className="text-2xl font-bold text-white group-hover:text-cyan-300 transition-colors">
-                  {proj.title}
-                </h3>
-
-                <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                  {proj.description}
-                </p>
-
-                {/* Tech Stack Badges */}
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {proj.techStack.map((tech, tIdx) => (
-                    <span
-                      key={tIdx}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-[11px] font-mono text-slate-300"
-                    >
-                      <TechIcon name={tech} size={12} />
-                      <span>{tech}</span>
-                    </span>
-                  ))}
-                </div>
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-xs font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-cyan)] transition-colors">
+                  {proj.index} // {proj.title}
+                </span>
+                <span className="font-mono text-[10px] text-[var(--text-muted)] px-2 py-0.5 rounded bg-[var(--tag-bg)]">
+                  {proj.badge}
+                </span>
               </div>
-
-              {/* Action Buttons */}
-              <div className="flex items-center justify-between border-t border-white/10 pt-4">
-                <button
-                  onClick={() => handleInspect(proj)}
-                  className="flex items-center gap-1.5 text-xs font-mono text-cyan-400 hover:text-cyan-300 font-bold transition-all hover:scale-105"
-                >
-                  <Eye className="w-3.5 h-3.5" />
-                  <span>Inspect Spec</span>
-                </button>
-
-                <div className="flex items-center gap-2">
-                  {proj.githubUrl && (
-                    <a
-                      href={proj.githubUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      onClick={() => sound.playClick(1.2)}
-                      className="p-2 rounded-lg bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white transition-all"
-                      title="Source Code"
-                    >
-                      <GithubIcon className="w-4 h-4 text-cyan-400" />
-                    </a>
-                  )}
-                  {proj.liveUrl && (
-                    <a
-                      href={proj.liveUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      onClick={() => sound.playClick(1.2)}
-                      className="p-2 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/30 transition-all"
-                      title="Live Demo"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                    </a>
-                  )}
-                </div>
-              </div>
+              <p className="text-[11px] text-[var(--text-secondary)] mt-1 line-clamp-1">
+                {proj.description}
+              </p>
             </div>
           ))}
         </div>
+
+        {/* Center Void: Open for 3D Falling Glass Slabs */}
+        <div className="lg:col-span-4 hidden lg:block" />
+
+        {/* Right Flank: Direct Architecture Shortcuts */}
+        <div className="lg:col-span-4 space-y-4 lg:text-right">
+          <div className="apple-glass p-4 rounded-3xl space-y-3 text-left">
+            <div className="flex items-center justify-between text-xs font-mono">
+              <span className="text-[var(--accent-gold)] font-bold">PHYSICAL GLASS MONOLITHS</span>
+              <span className="text-[10px] text-emerald-500">TRANSMISSION IOR 1.45</span>
+            </div>
+            <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+              Each 3D slab is an independent physical mesh with refractive transmission and dynamic tilt reacting to camera proximity.
+            </p>
+            <div className="pt-2 border-t border-[var(--glass-border)] flex items-center justify-between">
+              <button
+                onClick={() => handleInspect(projects[0])}
+                className="flex items-center gap-1.5 text-xs font-mono font-bold text-[var(--accent-cyan)] hover:opacity-80 transition-opacity"
+              >
+                <Eye className="w-3.5 h-3.5" />
+                <span>Inspect CareerOS</span>
+              </button>
+              <div className="flex items-center gap-2">
+                {projects[0].githubUrl && (
+                  <a
+                    href={projects[0].githubUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="p-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-[var(--text-secondary)]"
+                  >
+                    <GithubIcon className="w-3.5 h-3.5" />
+                  </a>
+                )}
+                {projects[0].liveUrl && (
+                  <a
+                    href={projects[0].liveUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="p-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-[var(--text-secondary)]"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Hint */}
+      <div className="pointer-events-auto flex items-center justify-between text-xs font-mono text-[var(--text-muted)] border-t border-[var(--hud-line)] pt-4">
+        <span>VERTICAL PLUMMET // 4 PHYSICAL GLASS SLABS IN CHASM</span>
+        <span className="animate-pulse">SCROLL TO ORBIT INTO DEEP SPACE BEACON →</span>
       </div>
     </section>
   );

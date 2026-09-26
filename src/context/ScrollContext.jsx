@@ -8,6 +8,29 @@ export function ScrollProvider({ children }) {
   const [selectedProject, setSelectedProject] = useState(null);
   const [wireframeMode, setWireframeMode] = useState(false);
   const [scrollPercent, setScrollPercent] = useState(0);
+  const [theme, setThemeState] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('tahir_theme') || 'obsidian';
+    }
+    return 'obsidian';
+  });
+
+  const setTheme = (newTheme) => {
+    setThemeState(newTheme);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('tahir_theme', newTheme);
+      document.documentElement.setAttribute('data-theme', newTheme);
+    }
+  };
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'obsidian' ? 'cream' : 'obsidian';
+    setTheme(nextTheme);
+  };
+
+  React.useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
 
   return (
     <ScrollContext.Provider
@@ -21,6 +44,9 @@ export function ScrollProvider({ children }) {
         setWireframeMode,
         scrollPercent,
         setScrollPercent,
+        theme,
+        setTheme,
+        toggleTheme,
       }}
     >
       {children}

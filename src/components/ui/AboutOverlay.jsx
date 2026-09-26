@@ -1,104 +1,126 @@
 import React from 'react';
 import { Cpu, GraduationCap, Zap, Database, Server, Container } from 'lucide-react';
 import { portfolioConfig } from '../../config/portfolio.config';
+import { useScrollProgress } from '../../context/ScrollContext';
 
 export function AboutOverlay() {
   const { about } = portfolioConfig;
-
-  const milestoneIcons = [Zap, Database, Server, Container];
+  const { theme } = useScrollProgress();
+  const isObsidian = theme === 'obsidian';
 
   return (
     <section
       id="about"
-      className="min-h-screen flex items-center justify-center px-4 sm:px-8 py-20 pointer-events-none"
+      className="min-h-screen flex flex-col justify-between px-6 sm:px-12 lg:px-16 py-24 select-none pointer-events-none"
     >
-      <div className="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pointer-events-auto">
-        {/* Left Column: Holographic Profile Dossier */}
-        <div className="lg:col-span-5 backdrop-blur-2xl bg-black/50 border border-white/10 p-6 sm:p-8 rounded-3xl shadow-2xl relative overflow-hidden group">
-          {/* Cyan Glow Accent */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none" />
+      {/* Top Banner: Section Marker */}
+      <div className="flex items-center justify-between pointer-events-auto border-b border-[var(--hud-line)] pb-4">
+        <div className="flex items-center gap-3">
+          <span className="font-mono text-xs font-bold px-2.5 py-1 rounded bg-[var(--glass-surface)] border border-[var(--glass-border)] text-[var(--accent-gold)]">
+            02 // ARCHITECTURE DIVE
+          </span>
+          <span className="text-xs font-mono text-[var(--text-muted)] hidden sm:inline">
+            CAMERA DIVE: TOP-DOWN PERSPECTIVE INTO 3D MACBOOK DISPLAY
+          </span>
+        </div>
+        <span className="font-mono text-xs text-[var(--text-muted)]">
+          SYSTEM_SPEC // RUNTIME_ACTIVE
+        </span>
+      </div>
 
-          {/* Profile Photo */}
-          <div className="relative aspect-square max-w-[280px] mx-auto rounded-2xl overflow-hidden border border-cyan-500/30 shadow-[0_0_30px_rgba(0,240,255,0.2)]">
-            <img
-              src="/assets/me.jpg"
-              alt="Muhammad Tahir"
-              className="w-full h-full object-cover grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
-            />
-            {/* Scanline overlay */}
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/10 to-transparent opacity-40 pointer-events-none" />
-            <div className="absolute bottom-2 left-2 right-2 bg-black/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 flex items-center justify-between text-[11px] font-mono">
-              <span className="text-cyan-400 font-bold">SYSTEM SPEC</span>
-              <span className="text-emerald-400">STATUS: OPTIMAL</span>
+      {/* Main Split Body: Left & Right Flanks (Center is wide open for 3D screen dive) */}
+      <div className="my-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pointer-events-auto">
+        {/* Left Flank: Profile Dossier & Education */}
+        <div className="lg:col-span-4 space-y-4">
+          <div className="apple-glass p-5 rounded-3xl space-y-4 max-w-sm">
+            {/* Small Profile Image with Scanline */}
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-2xl overflow-hidden border border-[var(--glass-border)] shadow-md flex-shrink-0">
+                <img
+                  src="/assets/me.jpg"
+                  alt="Muhammad Tahir"
+                  className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-500"
+                />
+              </div>
+              <div>
+                <h3 className="font-semibold text-base text-[var(--text-primary)]">
+                  Muhammad Tahir
+                </h3>
+                <p className="text-xs text-[var(--text-secondary)] font-mono">
+                  BS Computer Science
+                </p>
+                <div className="flex items-center gap-1.5 mt-1 text-[11px] text-emerald-500 font-mono">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span>Verified Engineer</span>
+                </div>
+              </div>
             </div>
-          </div>
 
-          {/* Academic Specifications */}
-          <div className="mt-6 space-y-3 font-mono text-xs border-t border-white/10 pt-4">
-            <div className="flex items-center gap-2 text-cyan-400">
-              <GraduationCap className="w-4 h-4" />
-              <span className="font-bold">{about.education.institution}</span>
+            {/* Academic Pedigree */}
+            <div className="space-y-1.5 text-xs font-mono border-t border-[var(--glass-border)] pt-3">
+              <div className="flex items-center gap-1.5 text-[var(--accent-gold)]">
+                <GraduationCap className="w-3.5 h-3.5" />
+                <span className="font-bold">{about.education.institution}</span>
+              </div>
+              <p className="text-[var(--text-secondary)] text-[11px]">
+                {about.education.degree} · <span className="font-bold text-emerald-500">{about.education.cgpa}</span>
+              </p>
             </div>
-            <p className="text-slate-300">
-              {about.education.degree} • <span className="text-emerald-400 font-bold">{about.education.cgpa}</span>
-            </p>
-            <div className="flex flex-wrap gap-1.5 pt-1">
-              {about.education.coursework.map((course, i) => (
+
+            {/* Core Coursework Pills */}
+            <div className="flex flex-wrap gap-1 pt-1">
+              {about.education.coursework.slice(0, 4).map((c, i) => (
                 <span
                   key={i}
-                  className="px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-[10px] text-slate-300"
+                  className="px-2 py-0.5 rounded-md bg-[var(--tag-bg)] border border-[var(--glass-border)] text-[10px] font-mono text-[var(--text-secondary)]"
                 >
-                  {course}
+                  {c}
                 </span>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Right Column: Engineering Philosophy & Milestones */}
-        <div className="lg:col-span-7 space-y-6">
-          <div className="backdrop-blur-2xl bg-black/50 border border-white/10 p-6 sm:p-8 rounded-3xl shadow-2xl space-y-4">
-            <div className="flex items-center gap-2 font-mono text-xs text-cyan-400 uppercase tracking-widest">
-              <Cpu className="w-4 h-4" />
-              <span>// ARCHITECTURE_CORE // NODE-02</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white uppercase tracking-tight">
-              The Control Room
+        {/* Center Void: Open for 3D Laptop Screen Dive */}
+        <div className="lg:col-span-4 hidden lg:block" />
+
+        {/* Right Flank: Architectural Milestones */}
+        <div className="lg:col-span-4 space-y-3 lg:text-right">
+          <div className="space-y-1">
+            <span className="text-xs font-mono uppercase tracking-widest text-[var(--accent-gold)]">
+              System Benchmarks
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[var(--text-primary)]">
+              Tactile Engineering
             </h2>
-            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-              {about.overview}
-            </p>
           </div>
 
-          {/* 4 Milestones Cards */}
-          <div className="grid grid-cols-2 gap-4">
-            {about.milestones.map((m, i) => {
-              const Icon = milestoneIcons[i] || Zap;
-              return (
-                <div
-                  key={i}
-                  className="backdrop-blur-xl bg-black/40 border border-white/10 p-4 sm:p-5 rounded-2xl hover:border-cyan-500/40 transition-all hover:bg-black/60 group"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-[10px] text-slate-500">
-                      SYS_{m.index}
-                    </span>
-                    <Icon className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
-                  </div>
-                  <div className="font-mono text-xl sm:text-2xl font-black text-white mt-1 text-cyan-300">
-                    {m.metric}
-                  </div>
-                  <div className="text-xs font-bold text-white mt-0.5">
-                    {m.label}
-                  </div>
-                  <p className="text-[11px] text-slate-400 mt-1 leading-snug">
-                    {m.detail}
-                  </p>
+          <div className="grid grid-cols-2 gap-2.5 pt-2">
+            {about.milestones.map((m, i) => (
+              <div
+                key={i}
+                className="apple-glass p-3.5 rounded-2xl space-y-1 text-left"
+              >
+                <div className="flex items-center justify-between text-[10px] font-mono text-[var(--text-muted)]">
+                  <span>SYS_{m.index}</span>
+                  <Zap className={`w-3 h-3 ${isObsidian ? 'text-cyan-400' : 'text-amber-700'}`} />
                 </div>
-              );
-            })}
+                <div className="text-lg font-bold text-[var(--text-primary)] font-mono">
+                  {m.metric}
+                </div>
+                <div className="text-[11px] font-medium text-[var(--text-secondary)] leading-tight">
+                  {m.label}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
+      </div>
+
+      {/* Bottom Hint */}
+      <div className="pointer-events-auto flex items-center justify-between text-xs font-mono text-[var(--text-muted)] border-t border-[var(--hud-line)] pt-4">
+        <span>INTERACTIVE TERMINAL DISPLAYED DIRECTLY IN 3D SCREEN</span>
+        <span className="animate-pulse">SCROLL TO FLY INTO LIQUID CHROME OCEAN →</span>
       </div>
     </section>
   );

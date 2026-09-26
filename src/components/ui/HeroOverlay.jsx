@@ -1,52 +1,85 @@
-import { ArrowDown, Mail, ShieldAlert } from 'lucide-react';
+import React from 'react';
+import { Mail, ArrowDown, ExternalLink } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from '../TechIcons';
 import { portfolioConfig } from '../../config/portfolio.config';
 import { sound } from '../../utils/soundEngine';
+import { useScrollProgress } from '../../context/ScrollContext';
 
 export function HeroOverlay() {
   const { personal, about } = portfolioConfig;
+  const { theme } = useScrollProgress();
+  const isObsidian = theme === 'obsidian';
 
   return (
     <section
       id="hero"
-      className="min-h-screen flex flex-col justify-between items-center text-center px-4 sm:px-8 py-24 select-none pointer-events-none"
+      className="min-h-screen flex flex-col justify-between px-6 sm:px-12 lg:px-16 pt-24 pb-12 select-none pointer-events-none"
     >
-      <div />
+      {/* Top Asymmetric Editorial Header */}
+      <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 pointer-events-auto">
+        <div className="space-y-3 max-w-xl">
+          {/* Status Pill */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--glass-surface)] border border-[var(--glass-border)] text-xs font-mono tracking-wider">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            <span className={isObsidian ? 'text-cyan-300' : 'text-amber-800'}>{personal.status}</span>
+          </div>
 
-      {/* Main Monumental Center Hero Card */}
-      <div className="max-w-3xl w-full backdrop-blur-2xl bg-black/40 border border-white/10 p-8 sm:p-12 rounded-3xl shadow-[0_0_80px_rgba(0,0,0,0.8)] pointer-events-auto space-y-6">
-        {/* Availability Pill */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-mono text-xs tracking-wider uppercase">
-          <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-          <span>{personal.status}</span>
+          {/* Monumental Editorial Headline */}
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-semibold tracking-tighter text-[var(--text-primary)] leading-[0.95]">
+            {personal.name}
+          </h1>
+
+          <p className="font-mono text-xs sm:text-sm tracking-wide text-[var(--text-secondary)]">
+            <span className={isObsidian ? 'text-cyan-400' : 'text-amber-700'}>// BACKEND & SYSTEMS ARCHITECT</span> · HIGH-CONCURRENCY RUNTIMES
+          </p>
         </div>
 
-        {/* Monumental Name */}
-        <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-[0_0_35px_rgba(0,240,255,0.25)]">
-          {personal.name}
-        </h1>
+        {/* Right Telemetry Column */}
+        <div className="flex flex-col md:items-end gap-2 text-xs font-mono">
+          <div className="px-4 py-2 rounded-2xl bg-[var(--glass-surface)] border border-[var(--glass-border)] backdrop-blur-xl space-y-1 md:text-right">
+            <span className="text-[10px] text-[var(--text-muted)] uppercase block">ARCHITECTURAL SLA</span>
+            <span className="text-base font-bold text-[var(--text-primary)]">&lt; 1.1ms P99 Latency</span>
+            <span className="text-[10px] text-emerald-500 block">99.99% Cluster Availability</span>
+          </div>
 
-        {/* Subtitle & Role */}
-        <p className="font-mono text-cyan-400 text-sm sm:text-base tracking-wide font-medium">
-          {personal.title} <span className="text-slate-500">•</span> {personal.roleSubtitle}
-        </p>
+          <div className="flex items-center gap-2 pt-1">
+            <span className="px-2.5 py-1 rounded-lg bg-[var(--tag-bg)] border border-[var(--glass-border)] text-[11px] text-[var(--text-secondary)]">
+              Go
+            </span>
+            <span className="px-2.5 py-1 rounded-lg bg-[var(--tag-bg)] border border-[var(--glass-border)] text-[11px] text-[var(--text-secondary)]">
+              C++ Core
+            </span>
+            <span className="px-2.5 py-1 rounded-lg bg-[var(--tag-bg)] border border-[var(--glass-border)] text-[11px] text-[var(--text-secondary)]">
+              Node.js
+            </span>
+            <span className="px-2.5 py-1 rounded-lg bg-[var(--tag-bg)] border border-[var(--glass-border)] text-[11px] text-[var(--text-secondary)]">
+              Docker / K8s
+            </span>
+          </div>
+        </div>
+      </div>
 
-        {/* Core Philosophy Statement */}
-        <p className="text-slate-300 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+      {/* Center 3D Space is completely open for the floating 3D MacBook Pro */}
+      <div className="my-auto py-16" />
+
+      {/* Bottom Editorial Action Bar */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pointer-events-auto border-t border-[var(--hud-line)] pt-6">
+        {/* Core Statement Quote */}
+        <p className="text-xs sm:text-sm text-[var(--text-secondary)] max-w-md italic leading-relaxed text-center sm:text-left">
           &ldquo;{about.statement}&rdquo;
         </p>
 
-        {/* Quick Social & Action Bar */}
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+        {/* Social & Direct Contact Links */}
+        <div className="flex items-center gap-3">
           {personal.social.github && (
             <a
               href={personal.social.github}
               target="_blank"
               rel="noreferrer"
               onClick={() => sound.playClick(1.2)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 text-white font-mono text-xs transition-all hover:scale-105"
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--glass-surface)] hover:bg-[var(--glass-border)] border border-[var(--glass-border)] text-[var(--text-primary)] font-mono text-xs transition-all duration-300 hover:scale-105"
             >
-              <GithubIcon className="w-3.5 h-3.5 text-cyan-400" />
+              <GithubIcon className={`w-3.5 h-3.5 ${isObsidian ? 'text-cyan-400' : 'text-amber-700'}`} />
               <span>GitHub</span>
             </a>
           )}
@@ -56,30 +89,30 @@ export function HeroOverlay() {
               target="_blank"
               rel="noreferrer"
               onClick={() => sound.playClick(1.2)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 text-white font-mono text-xs transition-all hover:scale-105"
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--glass-surface)] hover:bg-[var(--glass-border)] border border-[var(--glass-border)] text-[var(--text-primary)] font-mono text-xs transition-all duration-300 hover:scale-105"
             >
-              <LinkedinIcon className="w-3.5 h-3.5 text-cyan-400" />
+              <LinkedinIcon className={`w-3.5 h-3.5 ${isObsidian ? 'text-cyan-400' : 'text-amber-700'}`} />
               <span>LinkedIn</span>
             </a>
           )}
           <a
             href={`mailto:${personal.email}`}
             onClick={() => sound.playClick(1.2)}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/40 text-cyan-300 font-mono text-xs transition-all hover:scale-105"
+            className={`flex items-center gap-2 px-4 py-2 rounded-full font-mono text-xs font-bold transition-all duration-300 hover:scale-105 ${
+              isObsidian
+                ? 'bg-cyan-500 hover:bg-cyan-400 text-black shadow-[0_0_20px_rgba(0,240,255,0.4)]'
+                : 'bg-amber-600 hover:bg-amber-700 text-white shadow-[0_0_15px_rgba(180,100,20,0.3)]'
+            }`}
           >
-            <Mail className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Email</span>
+            <Mail className="w-3.5 h-3.5" />
+            <span>Connect</span>
           </a>
         </div>
-      </div>
 
-      {/* Animated Scroll Down Indicator */}
-      <div className="flex flex-col items-center gap-2 font-mono text-[11px] text-slate-400 animate-pulse pt-8">
-        <span className="tracking-widest uppercase text-cyan-400">
-          Scroll to open blast door & enter systems
-        </span>
-        <div className="w-5 h-9 rounded-full border-2 border-cyan-500/40 flex justify-center p-1">
-          <div className="w-1.5 h-2.5 rounded-full bg-cyan-400 animate-bounce" />
+        {/* Scroll Prompt */}
+        <div className="flex items-center gap-2 font-mono text-[11px] text-[var(--text-muted)] animate-pulse">
+          <span>SCROLL TO DIVE INTO 3D SCREEN</span>
+          <ArrowDown className="w-3.5 h-3.5 animate-bounce" />
         </div>
       </div>
     </section>

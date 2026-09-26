@@ -1,6 +1,5 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 
 // 4 Featured Projects with real screenshots
@@ -37,12 +36,23 @@ const PROJECTS_DATA = [
 
 function ProjectCard({ project, onSelect }) {
   const meshRef = useRef();
-  let texture;
-  try {
-    texture = useTexture(project.image);
-  } catch {
-    texture = null;
-  }
+  const [texture, setTexture] = useState(null);
+
+  useEffect(() => {
+    if (!project.image) return;
+    const loader = new THREE.TextureLoader();
+    loader.load(
+      project.image,
+      (tex) => {
+        tex.colorSpace = THREE.SRGBColorSpace;
+        setTexture(tex);
+      },
+      undefined,
+      () => {
+        // Fallback gracefully without throwing
+      }
+    );
+  }, [project.image]);
 
   useFrame(({ clock }) => {
     if (meshRef.current) {
