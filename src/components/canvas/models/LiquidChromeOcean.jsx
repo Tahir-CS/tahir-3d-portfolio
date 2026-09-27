@@ -1,14 +1,10 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useMemo } from 'react';
 import { extend, useFrame } from '@react-three/fiber';
-import { shaderMaterial, Float, Text } from '@react-three/drei';
+import { shaderMaterial, Float, Text, useGLTF, useAnimations } from '@react-three/drei';
 import * as THREE from 'three';
 import { useScrollProgress } from '../../../context/ScrollContext';
 
 // ── Gerstner Wave Ocean Material ─────────────────────────────────────────────
-// Mathematically rigorous trochoidal waves (GPU Gems Ch.1) with:
-// • True 3D vertex displacement (sharp crests, wide flat troughs)
-// • Analytical normals computed in shader (perfect lighting at any camera angle)
-// • Fresnel reflection + Blinn-Phong sun specular + foam at crests
 const GerstnerOceanMaterial = shaderMaterial(
   {
     uTime: 0,
@@ -52,7 +48,7 @@ const GerstnerOceanMaterial = shaderMaterial(
       vec3 tangent  = vec3(1.0, 0.0, 0.0);
       vec3 binormal = vec3(0.0, 0.0, 1.0);
 
-      // 4 layered waves — primary swell + cross-chop + high-freq detail
+      // 4 layered waves
       p += gerstner(Wave(vec2( 1.0, 0.3), 0.38, 30.0, 1.1, 1.0 ), position, tangent, binormal);
       p += gerstner(Wave(vec2( 0.6, 0.8), 0.32, 17.0, 0.6, 1.2 ), position, tangent, binormal);
       p += gerstner(Wave(vec2(-0.3, 1.0), 0.26,  8.0, 0.3, 0.85), position, tangent, binormal);
@@ -110,6 +106,59 @@ const GerstnerOceanMaterial = shaderMaterial(
 
 extend({ GerstnerOceanMaterial });
 
+// ── Realistic 3D Animated Ocean Mesh Model (ocean_surface.glb) ───────────────
+function RealOceanSurfaceModel({ isObsidian, wireframeMode }) {
+  const group = useRef();
+  const { scene, animations } = useGLTF('/models/ocean_surface.glb');
+  const { actions } = useAnimations(animations, group);
+
+  useEffect(() => {
+    if (actions && Object.keys(actions).length > 0) {
+      const activeAnim = Object.values(actions)[0];
+      activeAnim?.reset().fadeIn(0.5).play();
+    }
+  }, [actions]);
+
+  const clonedModel = useMemo(() => {
+    const clone = scene.clone(true);
+    clone.traverse((child) => {
+      if (child.isMesh) {
+        child.receiveShadow = true;
+        if (child.material) {
+          child.material = child.material.clone();
+          if (wireframeMode) {
+            child.material.wireframe = true;
+            child.material.color = new THREE.Color('#00ff88');
+          } else if (isObsidian) {
+            child.material.color = new THREE.Color('#021a30');
+            child.material.metalness = 0.95;
+            child.material.roughness = 0.08;
+            child.material.transparent = true;
+            child.material.opacity = 0.85;
+          } else {
+            child.material.color = new THREE.Color('#0a4d68');
+            child.material.metalness = 0.85;
+            child.material.roughness = 0.14;
+            child.material.transparent = true;
+            child.material.opacity = 0.82;
+          }
+        }
+      }
+    });
+    return clone;
+  }, [scene, isObsidian, wireframeMode]);
+
+  return (
+    <group ref={group} position={[0, 0.08, 0]}>
+      <primitive
+        object={clonedModel}
+        scale={[0.42, 0.42, 0.42]}
+        rotation={[-Math.PI / 2, 0, 0]}
+      />
+    </group>
+  );
+}
+
 // ── Tech Monoliths rising from the sea ───────────────────────────────────────
 const MONOLITHS = [
   { name: 'GOLANG',     desc: 'Concurrency & Distributed Runtimes', pos: [-5.0, 0, -10], height: 3.2, color: '#00add8' },
@@ -122,7 +171,7 @@ const MONOLITHS = [
 ];
 
 export function LiquidChromeOcean({ position = [0, -0.8, -11] }) {
-  const { theme } = useScrollProgress();
+  const { theme, wireframeMode } = useScrollProgress();
   const isObsidian = theme === 'obsidian';
   const matRef   = useRef();
   const groupRef = useRef();
@@ -143,9 +192,12 @@ export function LiquidChromeOcean({ position = [0, -0.8, -11] }) {
 
   return (
     <group position={position}>
-      {/* ── Gerstner Wave Ocean ── */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
-        <planeGeometry args={[90, 65, 192, 192]} />
+      {/* 1. Realistic Animated 3D Ocean Surface Model (ocean_surface.glb) */}
+      <RealOceanSurfaceModel isObsidian={isObsidian} wireframeMode={wireframeMode} />
+
+      {/* 2. Gerstner Wave Base Horizon with Physical Light Dispersion */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.02, 0]}>
+        <planeGeometry args={[95, 70, 192, 192]} />
         <gerstnerOceanMaterial
           ref={matRef}
           transparent
@@ -153,13 +205,13 @@ export function LiquidChromeOcean({ position = [0, -0.8, -11] }) {
         />
       </mesh>
 
-      {/* ── Deep underwater darkness below ── */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.5, 0]}>
-        <planeGeometry args={[90, 65]} />
-        <meshBasicMaterial color={isObsidian ? '#000a14' : '#001525'} />
+      {/* 3. Deep Abyss Layer */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.8, 0]}>
+        <planeGeometry args={[100, 75]} />
+        <meshBasicMaterial color={isObsidian ? '#000810' : '#001525'} />
       </mesh>
 
-      {/* ── Monoliths ── */}
+      {/* 4. Tech Monoliths Rising from the Water */}
       <group ref={groupRef}>
         {MONOLITHS.map((mono) => (
           <Float key={mono.name} speed={1.2} rotationIntensity={0.12} floatIntensity={0.2}>
@@ -199,3 +251,5 @@ export function LiquidChromeOcean({ position = [0, -0.8, -11] }) {
     </group>
   );
 }
+
+useGLTF.preload('/models/ocean_surface.glb');

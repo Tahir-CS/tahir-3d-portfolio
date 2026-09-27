@@ -8,7 +8,7 @@ import { InteractiveWorkstation } from './models/InteractiveWorkstation';
 import { LiquidChromeOcean } from './models/LiquidChromeOcean';
 import { ProjectChasm } from './models/ProjectChasm';
 import { SpaceBeacon } from './models/SpaceBeacon';
-import { CityScape } from './models/CityScape';
+import { RealisticCity } from './models/RealisticCity';
 import { useScrollProgress } from '../../context/ScrollContext';
 
 class SceneErrorBoundary extends React.Component {
@@ -95,8 +95,8 @@ function SceneContent() {
       {/* Section 1 & 2: Realistic 3D MacBook Pro Workstation & Top-Down Screen Dive */}
       <InteractiveWorkstation position={[0, 0, 0]} />
 
-      {/* City Skyline — procedural building backdrop behind the MacBook */}
-      <CityScape position={[0, -1.5, 0]} />
+      {/* Realistic 3D City & Sky-High Building Billboard Screens (allBuildings.glb) */}
+      <RealisticCity position={[0, -1.5, -16]} />
 
       {/* Section 3: Liquid Chrome / Ocean Reflection Plane & Skill Monoliths */}
       <LiquidChromeOcean position={[0, -0.6, -11]} />
