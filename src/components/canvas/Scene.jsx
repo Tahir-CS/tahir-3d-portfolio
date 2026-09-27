@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { AdaptiveDpr, Preload, Environment } from '@react-three/drei';
+import { AdaptiveDpr, Environment } from '@react-three/drei';
 import { CameraRig } from './CameraRig';
 import { Effects } from './Effects';
 import { DataParticles } from './DataParticles';
@@ -9,9 +9,11 @@ import { LiquidChromeOcean } from './models/LiquidChromeOcean';
 import { ProjectChasm } from './models/ProjectChasm';
 import { SpaceBeacon } from './models/SpaceBeacon';
 import { RealisticCity } from './models/RealisticCity';
+import { CityScape } from './models/CityScape';
 import { useScrollProgress } from '../../context/ScrollContext';
 
-class SceneErrorBoundary extends React.Component {
+// Isolated Error Boundary per model section so one model never breaks the scene
+class ModelErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
     this.state = { hasError: false };
@@ -20,11 +22,11 @@ class SceneErrorBoundary extends React.Component {
     return { hasError: true };
   }
   componentDidCatch(error, errorInfo) {
-    console.warn('3D Scene Error caught gracefully:', error, errorInfo);
+    console.warn('3D Model component warning:', error, errorInfo);
   }
   render() {
     if (this.state.hasError) {
-      return null;
+      return this.props.fallback || null;
     }
     return this.props.children;
   }
@@ -37,12 +39,12 @@ function SceneLighting() {
   return (
     <>
       <ambientLight
-        intensity={wireframeMode ? 0.7 : isObsidian ? 0.45 : 0.85}
+        intensity={wireframeMode ? 0.7 : isObsidian ? 0.5 : 0.9}
         color={wireframeMode ? '#00ff88' : isObsidian ? '#0f1016' : '#fff7ed'}
       />
       <directionalLight
         position={[8, 14, 8]}
-        intensity={isObsidian ? 1.8 : 1.4}
+        intensity={isObsidian ? 2.0 : 1.5}
         color={wireframeMode ? '#00ff88' : isObsidian ? '#ffffff' : '#fffdfa'}
         castShadow
       />
@@ -55,9 +57,9 @@ function SceneLighting() {
       />
       <pointLight
         position={[0, 2.5, 2]}
-        intensity={isObsidian ? 2.2 : 1.5}
+        intensity={isObsidian ? 2.4 : 1.6}
         color={wireframeMode ? '#00ff88' : isObsidian ? '#38bdf8' : '#e2b35a'}
-        distance={10}
+        distance={12}
       />
       <pointLight
         position={[0, 1.5, -11]}
@@ -77,45 +79,70 @@ function SceneLighting() {
 
 function SceneContent() {
   const { setSelectedProject, wireframeMode, theme } = useScrollProgress();
+  const isObsidian = theme === 'obsidian';
 
   return (
     <>
-      {/* 11-Waypoint Camera Rig with Screen Dive & Banking Rolls */}
+      {/* 1. Camera Choreography (Never blocked by Suspense) */}
       <CameraRig />
 
-      {/* Dynamic Lighting Setup */}
+      {/* 2. Dynamic Lighting Engine (Instant frame 1 illumination) */}
       <SceneLighting />
 
-      {/* Apple Studio Environment Probe (Local offline HDR) */}
-      <Environment files={theme === 'obsidian' ? '/models/city.hdr' : '/models/studio.hdr'} environmentIntensity={theme === 'obsidian' ? 0.9 : 0.6} />
-
-      {/* Floating Starlight & Data Stream Atmosphere */}
+      {/* 3. Floating Starlight & Data Stream Particles */}
       <DataParticles count={wireframeMode ? 700 : 450} />
 
-      {/* Section 1 & 2: Realistic 3D MacBook Pro Workstation & Top-Down Screen Dive */}
-      <InteractiveWorkstation position={[0, 0, 0]} />
+      {/* 4. HDR Environment Probe (Isolated Suspense) */}
+      <Suspense fallback={null}>
+        <Environment
+          files={isObsidian ? '/models/city.hdr' : '/models/studio.hdr'}
+          environmentIntensity={isObsidian ? 0.9 : 0.6}
+        />
+      </Suspense>
 
-      {/* Realistic 3D City & Sky-High Building Billboard Screens (allBuildings.glb) */}
-      <RealisticCity position={[0, -1.5, -16]} />
+      {/* 5. Section 1 & 2: Realistic Workstation (MacBook Pro + Studio Monitor) */}
+      <ModelErrorBoundary fallback={null}>
+        <Suspense fallback={null}>
+          <InteractiveWorkstation position={[0, 0, 0]} />
+        </Suspense>
+      </ModelErrorBoundary>
 
-      {/* Section 3: Liquid Chrome / Ocean Reflection Plane & Skill Monoliths */}
-      <LiquidChromeOcean position={[0, -0.6, -11]} />
+      {/* 6. Realistic 3D City & Billboard Screens (Procedural CityScape fallback while GLB streams) */}
+      <ModelErrorBoundary fallback={<CityScape position={[0, -1.5, -6]} />}>
+        <Suspense fallback={<CityScape position={[0, -1.5, -6]} />}>
+          <RealisticCity position={[0, -1.5, -16]} />
+        </Suspense>
+      </ModelErrorBoundary>
 
-      {/* Section 4: Vertical Free-Fall Descent & 3D Glass Project Slabs */}
-      <ProjectChasm
-        position={[0, 0, 0]}
-        onSelectProject={(proj) => setSelectedProject(proj)}
-      />
+      {/* 7. Section 3: Ocean Surface & Monoliths */}
+      <ModelErrorBoundary fallback={null}>
+        <Suspense fallback={null}>
+          <LiquidChromeOcean position={[0, -0.6, -11]} />
+        </Suspense>
+      </ModelErrorBoundary>
 
-      {/* Section 5: Deep Space Orbital Transmission Beacon */}
-      <SpaceBeacon position={[0, 0, -25]} />
+      {/* 8. Section 4: Vertical Free-Fall Descent & 3D Glass Project Slabs */}
+      <ModelErrorBoundary fallback={null}>
+        <Suspense fallback={null}>
+          <ProjectChasm
+            position={[0, 0, 0]}
+            onSelectProject={(proj) => setSelectedProject(proj)}
+          />
+        </Suspense>
+      </ModelErrorBoundary>
 
-      {/* Postprocessing Pass */}
+      {/* 9. Section 5: Deep Space Orbital Transmission Beacon */}
+      <ModelErrorBoundary fallback={null}>
+        <Suspense fallback={null}>
+          <SpaceBeacon position={[0, 0, -25]} />
+        </Suspense>
+      </ModelErrorBoundary>
+
+      {/* 10. Postprocessing Pass */}
       <Effects />
 
-      {/* Optimization Utilities */}
+      {/* 11. Dynamic Performance Scaling */}
       <AdaptiveDpr pixelated />
-      <Preload all />
     </>
   );
 }
@@ -151,11 +178,7 @@ export function Scene() {
         <color attach="background" args={[bgColor]} />
         <fog attach="fog" args={[fogColor, 8, 36]} />
 
-        <Suspense fallback={null}>
-          <SceneErrorBoundary>
-            <SceneContent />
-          </SceneErrorBoundary>
-        </Suspense>
+        <SceneContent />
       </Canvas>
     </div>
   );
