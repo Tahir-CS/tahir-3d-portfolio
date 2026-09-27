@@ -76,14 +76,17 @@ export function RealisticCity({ position = [0, -1.6, -17], scale = 0.16 }) {
         scale={0.155}
       />
 
-      {/* 3. Secondary Vertical Telemetry Billboard on East Skyscraper */}
+      {/* 3. Real 3D Outdoor Billboard Structure on West Skyscraper (outdoor_billboard.glb) */}
+      <RooftopOutdoorBillboard position={[-7.5, 5.2, 0.8]} rotation={[0, 0.32, 0]} scale={1.3} />
+
+      {/* 4. Secondary Vertical Telemetry Billboard on East Skyscraper */}
       <SideBillboardScreen
         position={[8.2, 5.6, 2.0]}
         rotation={[0, -0.28, 0]}
         scale={0.125}
       />
 
-      {/* 4. Ambient Cyber Skyline Neon Illumination */}
+      {/* 5. Ambient Cyber Skyline Neon Illumination */}
       <pointLight
         position={[0, 7.5, 2.5]}
         color={isObsidian ? '#00f0ff' : '#d4af37'}
@@ -99,11 +102,22 @@ export function RealisticCity({ position = [0, -1.6, -17], scale = 0.16 }) {
         decay={2}
       />
 
-      {/* 5. Procedural Skyline Extensions on the Far Flanks */}
+      {/* 6. Procedural Skyline Extensions on the Far Flanks */}
       <CityScape position={[0, 0, -6]} />
     </group>
   );
 }
 
-// Preload the building model
+function RooftopOutdoorBillboard({ position, rotation, scale }) {
+  const { scene } = useGLTF('/models/outdoor_billboard.glb');
+  const clone = useMemo(() => scene.clone(true), [scene]);
+  return (
+    <group position={position} rotation={rotation} scale={scale}>
+      <primitive object={clone} />
+    </group>
+  );
+}
+
+// Preload the models
 useGLTF.preload('/models/allBuildings.glb');
+useGLTF.preload('/models/outdoor_billboard.glb');

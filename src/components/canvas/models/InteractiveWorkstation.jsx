@@ -205,8 +205,106 @@ export function InteractiveWorkstation({ position = [0, 0, 0] }) {
           </div>
         </div>
       </Html>
+
+      {/* Companion Studio Monitor Display */}
+      <StudioDisplay isObsidian={isObsidian} wireframeMode={wireframeMode} />
+    </group>
+  );
+}
+
+function StudioDisplay({ isObsidian, wireframeMode }) {
+  const { scene } = useGLTF('/models/studio_monitor.glb');
+  const clonedMonitor = useMemo(() => {
+    const clone = scene.clone(true);
+    clone.traverse((child) => {
+      if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+        if (child.material) {
+          child.material = child.material.clone();
+          if (wireframeMode) {
+            child.material.wireframe = true;
+            child.material.color = new THREE.Color('#00ff88');
+          } else if (isObsidian) {
+            child.material.color = new THREE.Color('#141720');
+            child.material.metalness = 0.92;
+            child.material.roughness = 0.16;
+          } else {
+            child.material.color = new THREE.Color('#ece7de');
+            child.material.metalness = 0.65;
+            child.material.roughness = 0.28;
+          }
+        }
+      }
+    });
+    return clone;
+  }, [scene, isObsidian, wireframeMode]);
+
+  return (
+    <group position={[1.4, -0.4, -0.2]} rotation={[0, -0.32, 0]}>
+      {/* 3D Monitor Hardware */}
+      <primitive object={clonedMonitor} scale={0.38} />
+
+      {/* Screen Interface Pinned on Display */}
+      <Html
+        transform
+        occlude="blending"
+        position={[0, 0.62, 0.05]}
+        scale={0.092}
+        className="pointer-events-auto select-none"
+      >
+        <div
+          className={`w-[480px] h-[310px] rounded-md border p-3.5 shadow-2xl flex flex-col justify-between font-mono text-[11px] ${
+            isObsidian
+              ? 'bg-[#06080d]/95 border-cyan-500/40 text-neutral-200 shadow-cyan-500/20'
+              : 'bg-[#faf7f2]/95 border-amber-900/20 text-neutral-800'
+          }`}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between border-b border-white/10 pb-2 text-[10px]">
+            <span className="text-cyan-400 font-bold uppercase">GRAFANA // CLUSTER TELEMETRY</span>
+            <span className="text-emerald-400 animate-pulse">● 64 NODES HEALTHY</span>
+          </div>
+
+          {/* Metrics Gauges */}
+          <div className="grid grid-cols-2 gap-2 my-auto">
+            <div className="border border-white/10 p-2 rounded bg-white/5 space-y-0.5">
+              <span className="text-[9px] text-neutral-400 uppercase">THROUGHPUT</span>
+              <div className="text-base font-bold text-cyan-300">142K RPS</div>
+              <span className="text-[8px] text-emerald-400">P99: 0.72ms</span>
+            </div>
+            <div className="border border-white/10 p-2 rounded bg-white/5 space-y-0.5">
+              <span className="text-[9px] text-neutral-400 uppercase">CACHE HIT RATIO</span>
+              <div className="text-base font-bold text-emerald-400">99.4%</div>
+              <span className="text-[8px] text-neutral-400">REDIS CLUSTER</span>
+            </div>
+            <div className="border border-white/10 p-2 rounded bg-white/5 space-y-0.5">
+              <span className="text-[9px] text-neutral-400 uppercase">MEMORY PRESSURE</span>
+              <div className="text-base font-bold text-white">1.2 GB / 64 GB</div>
+              <span className="text-[8px] text-cyan-400">ZERO GC STALLS</span>
+            </div>
+            <div className="border border-white/10 p-2 rounded bg-white/5 space-y-0.5">
+              <span className="text-[9px] text-neutral-400 uppercase">CLUSTER UPTIME</span>
+              <div className="text-base font-bold text-cyan-300">99.999%</div>
+              <span className="text-[8px] text-emerald-400">SLA MET</span>
+            </div>
+          </div>
+
+          {/* Live Mini Sparkline Chart */}
+          <div className="pt-1.5 border-t border-white/10 flex items-end gap-1 h-5">
+            {[30, 45, 60, 50, 75, 90, 85, 60, 70, 95, 80, 85, 90, 100, 70, 85, 90].map((v, idx) => (
+              <div
+                key={idx}
+                className="flex-1 bg-cyan-400/80 rounded-t-xs"
+                style={{ height: `${v}%` }}
+              />
+            ))}
+          </div>
+        </div>
+      </Html>
     </group>
   );
 }
 
 useGLTF.preload('/models/macbook.glb');
+useGLTF.preload('/models/studio_monitor.glb');
