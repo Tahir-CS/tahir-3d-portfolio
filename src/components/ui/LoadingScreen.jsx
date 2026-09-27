@@ -29,7 +29,6 @@ export function LoadingScreen({ onLoaded }) {
         }
       });
     }, 280);
-
     return () => clearInterval(interval);
   }, []);
 
@@ -44,75 +43,84 @@ export function LoadingScreen({ onLoaded }) {
     onLoaded?.();
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#05070c] text-white p-6 font-mono select-none">
-      {/* Background Matrix Grid */}
-      <div className="absolute inset-0 bg-[radial-gradient(#00f0ff_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none" />
+  const pct = Math.round(((currentStep + 1) / BOOT_LOGS.length) * 100);
 
-      <div className="relative max-w-xl w-full border border-cyan-500/30 bg-black/80 backdrop-blur-2xl p-6 sm:p-8 rounded-2xl shadow-[0_0_50px_rgba(0,240,255,0.15)] space-y-6">
-        {/* Terminal Header */}
-        <div className="flex items-center justify-between border-b border-white/10 pb-4">
-          <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold tracking-widest uppercase">
-            <Terminal className="w-4 h-4 text-cyan-400 animate-pulse" />
-            <span>COMMAND_CENTER // BOOT SEQUENCE</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
-            <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
-            <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/70" />
-          </div>
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-start bg-[#05070c] text-white font-mono select-none overflow-hidden">
+      {/* Animated radial sweep */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(0,240,255,0.07),transparent)]" />
+        {/* Horizontal scan line */}
+        <div
+          className="absolute left-0 right-0 h-px bg-cyan-400/30"
+          style={{ top: `${100 - pct}%`, transition: 'top 0.28s linear' }}
+        />
+      </div>
+
+      {/* Bottom-left terminal — no box, just text on dark bg */}
+      <div className="relative z-10 px-10 sm:px-16 pb-12 sm:pb-16 space-y-5 w-full max-w-2xl">
+        {/* Header label */}
+        <div className="flex items-center gap-2 text-cyan-500/60 text-[10px] uppercase tracking-[0.3em]">
+          <Terminal className="w-3.5 h-3.5 animate-pulse" />
+          <span>COMMAND_CENTER // BOOT SEQUENCE</span>
         </div>
 
-        {/* Boot Terminal Log Output */}
-        <div className="space-y-2 min-h-[160px] text-xs">
+        {/* Log lines — bare text, no container */}
+        <div className="space-y-1.5 min-h-[140px]">
           {BOOT_LOGS.slice(0, currentStep + 1).map((log, i) => (
             <div
               key={i}
-              className={`flex items-start gap-2 ${
+              className={`flex items-start gap-2 text-[11px] leading-relaxed ${
                 i === currentStep
                   ? 'text-cyan-300 font-bold'
-                  : 'text-slate-400'
+                  : 'text-slate-500'
               }`}
             >
-              <span className="text-cyan-500">&gt;</span>
+              <span className="text-cyan-600 shrink-0">›</span>
               <span>{log}</span>
             </div>
           ))}
         </div>
 
-        {/* Progress Bar */}
-        <div className="space-y-2">
-          <div className="flex justify-between text-[11px] text-slate-400 font-mono">
+        {/* Progress line — thin, no border box */}
+        <div className="space-y-1.5">
+          <div className="flex justify-between text-[10px] text-slate-600">
             <span>CLUSTER SYNCHRONIZATION</span>
-            <span className="text-cyan-400 font-bold">
-              {Math.round(((currentStep + 1) / BOOT_LOGS.length) * 100)}%
-            </span>
+            <span className="text-cyan-400 font-bold">{pct}%</span>
           </div>
-          <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+          <div className="w-full h-px bg-white/10">
             <div
-              className="h-full bg-gradient-to-r from-cyan-500 to-emerald-400 transition-all duration-300 rounded-full"
-              style={{
-                width: `${((currentStep + 1) / BOOT_LOGS.length) * 100}%`,
-              }}
+              className="h-full bg-cyan-500 transition-all duration-300 shadow-[0_0_8px_rgba(0,240,255,0.6)]"
+              style={{ width: `${pct}%` }}
             />
           </div>
         </div>
 
-        {/* Interactive Enter Button */}
+        {/* CTA — minimal, flat */}
         {ready ? (
           <button
             onClick={handleEnter}
-            className="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold uppercase tracking-widest text-xs rounded-xl flex items-center justify-center gap-2 transition-all shadow-[0_0_30px_rgba(0,240,255,0.4)] animate-bounce"
+            className="flex items-center gap-3 text-black bg-cyan-400 hover:bg-cyan-300 px-8 py-3 text-xs font-bold uppercase tracking-widest transition-all duration-200 hover:scale-105 shadow-[0_0_30px_rgba(0,240,255,0.35)] animate-bounce"
           >
             <ShieldCheck className="w-4 h-4" />
             <span>INITIALIZE ARCHITECTURE TRAVEL</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         ) : (
-          <div className="text-center text-[11px] text-slate-500 uppercase tracking-widest animate-pulse">
+          <div className="text-[10px] text-slate-600 uppercase tracking-widest animate-pulse">
             Configuring WebGL Pipeline...
           </div>
         )}
+      </div>
+
+      {/* Giant typographic backdrop — purely decorative */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
+        <span
+          className="text-[22vw] font-black text-white/[0.025] tracking-tighter leading-none"
+          aria-hidden="true"
+        >
+          SYS
+        </span>
       </div>
     </div>
   );

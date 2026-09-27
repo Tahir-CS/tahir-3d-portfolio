@@ -34,27 +34,19 @@ export function HeroOverlay() {
           </p>
         </div>
 
-        {/* Right Telemetry Column */}
-        <div className="flex flex-col md:items-end gap-2 text-xs font-mono">
-          <div className="px-4 py-2 rounded-2xl bg-[var(--glass-surface)] border border-[var(--glass-border)] backdrop-blur-xl space-y-1 md:text-right">
-            <span className="text-[10px] text-[var(--text-muted)] uppercase block">ARCHITECTURAL SLA</span>
-            <span className="text-base font-bold text-[var(--text-primary)]">&lt; 1.1ms P99 Latency</span>
-            <span className="text-[10px] text-emerald-500 block">99.99% Cluster Availability</span>
+        {/* Right Telemetry Column — bare text, no box */}
+        <div className="flex flex-col md:items-end gap-3 text-xs font-mono">
+          <div className="space-y-0.5 md:text-right border-b border-[var(--hud-line)] pb-3">
+            <span className="text-[9px] text-[var(--text-muted)] uppercase tracking-[0.25em] block">ARCHITECTURAL SLA</span>
+            <span className="text-sm font-bold text-[var(--text-primary)] block">&lt; 1.1ms P99 Latency</span>
+            <span className="text-[9px] text-emerald-500 block">99.99% Cluster Availability</span>
           </div>
-
-          <div className="flex items-center gap-2 pt-1">
-            <span className="px-2.5 py-1 rounded-lg bg-[var(--tag-bg)] border border-[var(--glass-border)] text-[11px] text-[var(--text-secondary)]">
-              Go
-            </span>
-            <span className="px-2.5 py-1 rounded-lg bg-[var(--tag-bg)] border border-[var(--glass-border)] text-[11px] text-[var(--text-secondary)]">
-              C++ Core
-            </span>
-            <span className="px-2.5 py-1 rounded-lg bg-[var(--tag-bg)] border border-[var(--glass-border)] text-[11px] text-[var(--text-secondary)]">
-              Node.js
-            </span>
-            <span className="px-2.5 py-1 rounded-lg bg-[var(--tag-bg)] border border-[var(--glass-border)] text-[11px] text-[var(--text-secondary)]">
-              Docker / K8s
-            </span>
+          <div className="flex items-center gap-1.5 flex-wrap md:justify-end">
+            {['Go', 'C++ Core', 'Node.js', 'Docker/K8s'].map((t) => (
+              <span key={t} className="text-[9px] font-mono text-[var(--text-muted)] border border-[var(--hud-line)] px-1.5 py-0.5 rounded">
+                {t}
+              </span>
+            ))}
           </div>
         </div>
       </div>

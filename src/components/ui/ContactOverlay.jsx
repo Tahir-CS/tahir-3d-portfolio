@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Mail, Copy, Check, Phone, Terminal, Sparkles } from 'lucide-react';
+import { Send, Copy, Check, Phone, Sparkles } from 'lucide-react';
 import { portfolioConfig } from '../../config/portfolio.config';
 import { GithubIcon, LinkedinIcon } from '../TechIcons';
 import { sound } from '../../utils/soundEngine';
@@ -13,6 +13,7 @@ export function ContactOverlay() {
   const [submitted, setSubmitted] = useState(false);
 
   const isObsidian = theme === 'obsidian';
+  const accentText = isObsidian ? 'text-cyan-400' : 'text-amber-700';
 
   const handleCopyEmail = () => {
     sound.playClick(1.4);
@@ -33,210 +34,176 @@ export function ContactOverlay() {
       className="min-h-screen flex flex-col justify-between px-6 sm:px-12 lg:px-16 py-24 select-none pointer-events-none"
     >
       {/* Top Banner */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pointer-events-auto border-b border-[var(--hud-line)] pb-4">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-2 pointer-events-auto border-b border-[var(--hud-line)] pb-4">
         <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <span className="font-mono text-xs font-bold px-2.5 py-1 rounded bg-[var(--glass-surface)] border border-[var(--glass-border)] text-[var(--accent-gold)]">
-              06 // ORBITAL UPLINK NODE
-            </span>
-            <span className="font-mono text-xs text-[var(--text-muted)] hidden sm:inline">
-              DEEP SPACE TRANSMISSION TERMINAL
-            </span>
-          </div>
+          <span className={`font-mono text-[10px] font-bold uppercase tracking-[0.25em] ${accentText}`}>
+            06 // ORBITAL UPLINK NODE · DEEP SPACE TERMINAL
+          </span>
           <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)]">
             Initiate Contact
           </h2>
         </div>
-
-        <div className="text-xs font-mono text-[var(--text-muted)]">
-          AVAILABILITY: OPEN FOR BACKEND & DISTRIBUTED ROLES
+        <div className="text-[10px] font-mono text-[var(--text-muted)] pointer-events-auto">
+          AVAILABILITY: OPEN FOR BACKEND &amp; DISTRIBUTED ROLES
         </div>
       </div>
 
-      {/* Main Body */}
-      <div className="my-auto py-8 max-w-5xl mx-auto w-full pointer-events-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Left Column: Direct Access Dossier */}
-          <div className="lg:col-span-5 apple-glass p-6 sm:p-8 rounded-3xl space-y-6 flex flex-col justify-between">
-            <div className="space-y-4">
-              <span className="font-mono text-xs text-[var(--accent-gold)] uppercase tracking-wider block">
-                Direct Channels
-              </span>
+      {/* Body — split, no apple-glass boxes */}
+      <div className="my-auto grid grid-cols-1 lg:grid-cols-12 gap-x-12 gap-y-8 items-start pointer-events-auto">
 
-              {/* Copy Email Card */}
-              <div
-                onClick={handleCopyEmail}
-                className="p-4 rounded-2xl bg-[var(--glass-surface)] hover:bg-[var(--glass-border)] border border-[var(--glass-border)] transition-all cursor-pointer group"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-[10px] text-[var(--accent-gold)] uppercase">
-                    Primary Mail Uplink
-                  </span>
-                  {copied ? (
-                    <span className="flex items-center gap-1 font-mono text-[10px] text-emerald-500">
-                      <Check className="w-3 h-3" /> COPIED
-                    </span>
-                  ) : (
-                    <Copy className="w-3.5 h-3.5 text-[var(--text-muted)] group-hover:text-[var(--text-primary)]" />
-                  )}
-                </div>
-                <div className="font-mono text-xs sm:text-sm font-bold text-[var(--text-primary)] mt-1 break-all">
-                  {personal.email}
-                </div>
+        {/* Left: Direct channels — bare text links, no card boxes */}
+        <div className="lg:col-span-4 space-y-6">
+          <span className={`font-mono text-[10px] font-bold uppercase tracking-[0.2em] ${accentText} block`}>
+            Direct Channels
+          </span>
+
+          {/* Email — borderless row */}
+          <button
+            onClick={handleCopyEmail}
+            className="w-full text-left group flex items-start justify-between border-b border-[var(--hud-line)] pb-4 hover:pb-3 transition-all duration-150"
+          >
+            <div>
+              <span className={`font-mono text-[9px] uppercase tracking-widest ${accentText}`}>Primary Mail Uplink</span>
+              <div className="font-mono text-xs font-bold text-[var(--text-primary)] mt-0.5 break-all">
+                {personal.email}
               </div>
-
-              {/* Phone Card */}
-              {personal.phone && (
-                <a
-                  href={`tel:${personal.phone}`}
-                  onClick={() => sound.playClick(1.1)}
-                  className="p-4 rounded-2xl bg-[var(--glass-surface)] hover:bg-[var(--glass-border)] border border-[var(--glass-border)] transition-all block group"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-[10px] text-[var(--accent-gold)] uppercase">
-                      Voice Frequency
-                    </span>
-                    <Phone className="w-3.5 h-3.5 text-[var(--text-muted)] group-hover:text-[var(--text-primary)]" />
-                  </div>
-                  <div className="font-mono text-xs sm:text-sm font-bold text-[var(--text-primary)] mt-1">
-                    {personal.phone}
-                  </div>
-                </a>
-              )}
             </div>
-
-            {/* Social Grid */}
-            <div className="pt-4 border-t border-[var(--glass-border)] flex gap-2">
-              {personal.social.github && (
-                <a
-                  href={personal.social.github}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={() => sound.playClick(1.2)}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-[var(--glass-surface)] hover:bg-[var(--glass-border)] border border-[var(--glass-border)] text-[var(--text-primary)] font-mono text-xs transition-all hover:scale-105"
-                >
-                  <GithubIcon className={`w-4 h-4 ${isObsidian ? 'text-cyan-400' : 'text-amber-700'}`} />
-                  <span>GitHub</span>
-                </a>
-              )}
-              {personal.social.linkedin && (
-                <a
-                  href={personal.social.linkedin}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={() => sound.playClick(1.2)}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-[var(--glass-surface)] hover:bg-[var(--glass-border)] border border-[var(--glass-border)] text-[var(--text-primary)] font-mono text-xs transition-all hover:scale-105"
-                >
-                  <LinkedinIcon className={`w-4 h-4 ${isObsidian ? 'text-cyan-400' : 'text-amber-700'}`} />
-                  <span>LinkedIn</span>
-                </a>
-              )}
-            </div>
-          </div>
-
-          {/* Right Column: Terminal Contact Form */}
-          <div className="lg:col-span-7 apple-glass p-6 sm:p-8 rounded-3xl">
-            {submitted ? (
-              <div className="py-12 text-center space-y-4 font-mono">
-                <div className="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-400 text-emerald-400 mx-auto flex items-center justify-center animate-bounce">
-                  <Check className="w-6 h-6" />
-                </div>
-                <h4 className="text-2xl font-bold text-[var(--text-primary)] uppercase">
-                  TRANSMISSION DISPATCHED
-                </h4>
-                <p className="text-[var(--text-secondary)] text-xs max-w-sm mx-auto">
-                  Packet successfully routed to {personal.email}. Response expected within standard latency envelope.
-                </p>
-                <button
-                  onClick={() => setSubmitted(false)}
-                  className="mt-4 px-6 py-2 rounded-xl bg-[var(--glass-surface)] hover:bg-[var(--glass-border)] border border-[var(--glass-border)] text-[var(--text-primary)] text-xs"
-                >
-                  Send Another Transmission
-                </button>
-              </div>
+            {copied ? (
+              <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-1" />
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4 font-mono text-xs">
-                <div className="text-[var(--accent-gold)] font-bold tracking-widest text-[11px] flex items-center gap-2 border-b border-[var(--glass-border)] pb-2">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>TRANSMIT_PACKET.SH</span>
-                </div>
+              <Copy className="w-3.5 h-3.5 text-[var(--text-muted)] group-hover:text-[var(--text-primary)] shrink-0 mt-1 transition-colors" />
+            )}
+          </button>
 
-                <div className="space-y-1">
-                  <label className="text-[var(--text-muted)] text-[11px] block">
-                    [01] SENDER_NAME:
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formState.name}
-                    onChange={(e) => {
-                      sound.playTypingBlip();
-                      setFormState({ ...formState, name: e.target.value });
-                    }}
-                    placeholder="e.g. Alex Mercer"
-                    className="w-full px-4 py-3 bg-[var(--glass-surface)] border border-[var(--glass-border)] focus:border-[var(--accent-gold)] focus:outline-none rounded-2xl text-[var(--text-primary)] font-mono placeholder:text-[var(--text-muted)] transition-all"
-                  />
+          {/* Phone */}
+          {personal.phone && (
+            <a
+              href={`tel:${personal.phone}`}
+              onClick={() => sound.playClick(1.1)}
+              className="flex items-start justify-between border-b border-[var(--hud-line)] pb-4 group"
+            >
+              <div>
+                <span className={`font-mono text-[9px] uppercase tracking-widest ${accentText}`}>Voice Frequency</span>
+                <div className="font-mono text-xs font-bold text-[var(--text-primary)] mt-0.5">
+                  {personal.phone}
                 </div>
+              </div>
+              <Phone className="w-3.5 h-3.5 text-[var(--text-muted)] group-hover:text-[var(--text-primary)] shrink-0 mt-1 transition-colors" />
+            </a>
+          )}
 
-                <div className="space-y-1">
-                  <label className="text-[var(--text-muted)] text-[11px] block">
-                    [02] RETURN_FREQUENCY (EMAIL):
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    value={formState.email}
-                    onChange={(e) => {
-                      sound.playTypingBlip();
-                      setFormState({ ...formState, email: e.target.value });
-                    }}
-                    placeholder="e.g. alex@enterprise.com"
-                    className="w-full px-4 py-3 bg-[var(--glass-surface)] border border-[var(--glass-border)] focus:border-[var(--accent-gold)] focus:outline-none rounded-2xl text-[var(--text-primary)] font-mono placeholder:text-[var(--text-muted)] transition-all"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-[var(--text-muted)] text-[11px] block">
-                    [03] PAYLOAD_MESSAGE:
-                  </label>
-                  <textarea
-                    rows={4}
-                    required
-                    value={formState.message}
-                    onChange={(e) => {
-                      sound.playTypingBlip();
-                      setFormState({ ...formState, message: e.target.value });
-                    }}
-                    placeholder="Enter project requirements, engineering roles, or architecture collaboration proposals..."
-                    className="w-full px-4 py-3 bg-[var(--glass-surface)] border border-[var(--glass-border)] focus:border-[var(--accent-gold)] focus:outline-none rounded-2xl text-[var(--text-primary)] font-mono placeholder:text-[var(--text-muted)] transition-all resize-none"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className={`w-full py-4 font-bold uppercase tracking-widest text-xs rounded-2xl flex items-center justify-center gap-2 transition-all hover:scale-[1.01] ${
-                    isObsidian
-                      ? 'bg-gradient-to-r from-cyan-500 to-emerald-400 hover:from-cyan-400 hover:to-emerald-300 text-black shadow-[0_0_25px_rgba(0,240,255,0.3)]'
-                      : 'bg-[#18181b] hover:bg-neutral-800 text-white shadow-[0_0_15px_rgba(0,0,0,0.15)]'
-                  }`}
-                >
-                  <Send className="w-4 h-4" />
-                  <span>TRANSMIT PAYLOAD TO TAHIR</span>
-                </button>
-              </form>
+          {/* Social links — bare icon + label row */}
+          <div className="flex items-center gap-5 pt-1">
+            {personal.social.github && (
+              <a
+                href={personal.social.github}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => sound.playClick(1.2)}
+                className={`flex items-center gap-1.5 font-mono text-[10px] text-[var(--text-muted)] hover:${accentText.replace('text-', '')} transition-colors`}
+              >
+                <GithubIcon className="w-4 h-4" />
+                <span>GitHub</span>
+              </a>
+            )}
+            {personal.social.linkedin && (
+              <a
+                href={personal.social.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => sound.playClick(1.2)}
+                className={`flex items-center gap-1.5 font-mono text-[10px] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors`}
+              >
+                <LinkedinIcon className="w-4 h-4" />
+                <span>LinkedIn</span>
+              </a>
             )}
           </div>
         </div>
+
+        {/* Center void — space beacon visible here */}
+        <div className="lg:col-span-1 hidden lg:block" />
+
+        {/* Right: Terminal form — no glass box, inputs on transparent bg */}
+        <div className="lg:col-span-7 space-y-4 font-mono text-xs">
+          {submitted ? (
+            <div className="py-10 space-y-3 font-mono text-center">
+              <div className={`text-3xl font-black ${accentText}`}>✓</div>
+              <h4 className="text-base font-bold text-[var(--text-primary)] uppercase tracking-widest">
+                TRANSMISSION DISPATCHED
+              </h4>
+              <p className="text-[10px] text-[var(--text-muted)] max-w-sm mx-auto">
+                Packet routed to {personal.email}. Response within standard latency envelope.
+              </p>
+              <button
+                onClick={() => setSubmitted(false)}
+                className={`text-[10px] font-mono ${accentText} hover:opacity-70 underline transition-opacity`}
+              >
+                Send Another Transmission
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className={`flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest ${accentText} border-b border-[var(--hud-line)] pb-2`}>
+                <Sparkles className="w-3 h-3" />
+                <span>TRANSMIT_PACKET.SH</span>
+              </div>
+
+              {[
+                { key: 'name', label: '[01] SENDER_NAME', placeholder: 'e.g. Alex Mercer', type: 'text' },
+                { key: 'email', label: '[02] RETURN_FREQUENCY (EMAIL)', placeholder: 'e.g. alex@enterprise.com', type: 'email' },
+              ].map(({ key, label, placeholder, type }) => (
+                <div key={key} className="space-y-1">
+                  <label className="text-[9px] text-[var(--text-muted)] uppercase tracking-widest block">{label}</label>
+                  <input
+                    type={type}
+                    required
+                    value={formState[key]}
+                    onChange={(e) => {
+                      sound.playTypingBlip();
+                      setFormState({ ...formState, [key]: e.target.value });
+                    }}
+                    placeholder={placeholder}
+                    className="w-full px-0 py-2 bg-transparent border-0 border-b border-[var(--hud-line)] focus:border-[var(--text-primary)] focus:outline-none text-[var(--text-primary)] font-mono text-xs placeholder:text-[var(--text-muted)]/50 transition-all"
+                  />
+                </div>
+              ))}
+
+              <div className="space-y-1">
+                <label className="text-[9px] text-[var(--text-muted)] uppercase tracking-widest block">[03] PAYLOAD_MESSAGE</label>
+                <textarea
+                  rows={4}
+                  required
+                  value={formState.message}
+                  onChange={(e) => {
+                    sound.playTypingBlip();
+                    setFormState({ ...formState, message: e.target.value });
+                  }}
+                  placeholder="Enter project requirements, engineering roles, or collaboration proposals..."
+                  className="w-full px-0 py-2 bg-transparent border-0 border-b border-[var(--hud-line)] focus:border-[var(--text-primary)] focus:outline-none text-[var(--text-primary)] font-mono text-xs placeholder:text-[var(--text-muted)]/50 transition-all resize-none"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className={`flex items-center gap-2 px-8 py-3 text-xs font-bold uppercase tracking-widest transition-all duration-200 hover:scale-105 ${
+                  isObsidian
+                    ? 'bg-cyan-400 text-black hover:bg-cyan-300 shadow-[0_0_25px_rgba(0,240,255,0.3)]'
+                    : 'bg-[#18181b] text-white hover:bg-neutral-700'
+                }`}
+              >
+                <Send className="w-3.5 h-3.5" />
+                <span>TRANSMIT PAYLOAD TO TAHIR</span>
+              </button>
+            </form>
+          )}
+        </div>
       </div>
 
-      {/* Footer System Watermark */}
-      <footer className="max-w-5xl w-full mx-auto pt-8 pb-4 text-center font-mono text-[11px] text-[var(--text-muted)] border-t border-[var(--hud-line)] pointer-events-auto">
-        <div>
-          MUHAMMAD TAHIR © {new Date().getFullYear()} • UET LAHORE • COMPUTER SCIENCE
-        </div>
-        <div className="text-[10px] opacity-75 mt-1">
-          APPLE EDITORIAL 3D SCROLLYTELLING • POWERED BY R3F, DREI, GSAP & THREE.JS
-        </div>
+      {/* Footer */}
+      <footer className="pt-6 pb-2 font-mono text-[9px] text-[var(--text-muted)] border-t border-[var(--hud-line)] pointer-events-auto flex items-center justify-between">
+        <span>MUHAMMAD TAHIR © {new Date().getFullYear()} • UET LAHORE • COMPUTER SCIENCE</span>
+        <span className="hidden sm:inline">R3F · DREI · GSAP · THREE.JS</span>
       </footer>
     </section>
   );
