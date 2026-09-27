@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { Float, Text } from '@react-three/drei';
 import * as THREE from 'three';
 import { useScrollProgress } from '../../../context/ScrollContext';
+import { ContactWater } from './ContactWater';
 
 export function SpaceBeacon({ position = [0, 0, -25] }) {
   const { theme, wireframeMode } = useScrollProgress();
@@ -105,6 +106,9 @@ export function SpaceBeacon({ position = [0, 0, -25] }) {
       >
         DIRECT TRANSMISSION READY // 2026
       </Text>
+
+      {/* 5. Serene Reflective Ocean Beneath the Beacon */}
+      <ContactWater position={[0, -1.35, 0]} />
     </group>
   );
 }
