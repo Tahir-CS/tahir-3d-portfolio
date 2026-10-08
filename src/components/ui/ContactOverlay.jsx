@@ -37,7 +37,7 @@ export function ContactOverlay() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-2 pointer-events-auto border-b border-[var(--hud-line)] pb-4">
         <div className="space-y-1">
           <span className={`font-mono text-[10px] font-bold uppercase tracking-[0.25em] ${accentText}`}>
-            06 // ORBITAL UPLINK NODE · DEEP SPACE TERMINAL
+            05 // SUMMIT BROADCAST TERMINAL · ROOFTOP TRANSMISSION DECK
           </span>
           <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)]">
             Initiate Contact

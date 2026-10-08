@@ -1,6 +1,6 @@
-import React, { useRef, useMemo, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Text, Float } from '@react-three/drei';
+import { Text } from '@react-three/drei';
 import * as THREE from 'three';
 import { useScrollProgress } from '../../../context/ScrollContext';
 import { portfolioConfig } from '../../../config/portfolio.config';
@@ -13,7 +13,7 @@ function ProjectGlassSlab({ project, index, position, onSelect }) {
 
   const isObsidian = theme === 'obsidian';
 
-  // Load project image safely without violating rules of hooks
+  // Load project thumbnail safely
   useEffect(() => {
     if (project.thumbnail) {
       const loader = new THREE.TextureLoader();
@@ -29,27 +29,22 @@ function ProjectGlassSlab({ project, index, position, onSelect }) {
     }
   }, [project.thumbnail]);
 
-  useFrame(({ camera }, delta) => {
+  useFrame(({ camera }) => {
     if (!groupRef.current) return;
 
-    // Calculate vertical distance from camera to slab
-    const distY = camera.position.y - position[1];
-    
-    // Proximity factor: 1 when camera is level with slab, 0 when far
-    const proximity = THREE.MathUtils.clamp(1 - Math.abs(distY) / 5.5, 0, 1);
+    // Smooth subtle proximity tilt as camera glides past
+    const distY = camera.position.y - (position[1] + groupRef.current.parent.position.y);
+    const proximity = THREE.MathUtils.clamp(1 - Math.abs(distY) / 4.0, 0, 1);
 
-    // Dynamic tilt angle and horizontal slide as camera plummets past
     const side = index % 2 === 0 ? 1 : -1;
-    const targetRotX = (distY * 0.04) + (hovered ? 0.05 : 0);
-    const targetRotZ = side * (0.04 + proximity * 0.05);
-    const targetPosX = position[0] + (1 - proximity) * (side * 1.2) + (hovered ? side * 0.3 : 0);
+    const targetRotX = (distY * 0.03) + (hovered ? 0.05 : 0);
+    const targetRotY = side * (0.05 + proximity * 0.04);
 
     groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetRotX, 0.1);
-    groupRef.current.rotation.z = THREE.MathUtils.lerp(groupRef.current.rotation.z, targetRotZ, 0.1);
-    groupRef.current.position.x = THREE.MathUtils.lerp(groupRef.current.position.x, targetPosX, 0.1);
+    groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetRotY, 0.1);
 
     if (hovered) {
-      groupRef.current.scale.lerp(new THREE.Vector3(1.04, 1.04, 1.04), 0.15);
+      groupRef.current.scale.lerp(new THREE.Vector3(1.05, 1.05, 1.05), 0.15);
     } else {
       groupRef.current.scale.lerp(new THREE.Vector3(1, 1, 1), 0.15);
     }
@@ -113,7 +108,7 @@ function ProjectGlassSlab({ project, index, position, onSelect }) {
         </mesh>
       )}
 
-      {/* 4. 3D Specular Typography Etched onto Glass */}
+      {/* 4. 3D Typography Etched onto Glass */}
       <Text
         position={[-1.9, -0.65, 0.08]}
         fontSize={0.17}
@@ -152,32 +147,47 @@ function ProjectGlassSlab({ project, index, position, onSelect }) {
   );
 }
 
-export function ProjectChasm({ position = [0, 0, 0], onSelectProject }) {
+export function ProjectChasm({ position = [0, 0, -18.5], onSelectProject }) {
+  const { theme, wireframeMode } = useScrollProgress();
+  const isObsidian = theme === 'obsidian';
   const projects = (portfolioConfig.projects || []).slice(0, 4);
 
-  // Staggered vertical heights for the free-fall descent
+  // Positioned along the Skyscraper Showcase Facade in the City Plaza
   const SLAB_CONFIGS = [
-    { y: 10.0, x: -1.8, z: 0 },
-    { y: 5.5,  x: 1.8,  z: -0.5 },
-    { y: 1.0,  x: -1.6, z: 0.2 },
-    { y: -3.5, x: 1.6,  z: -0.2 },
+    { y: 5.0,  x: -1.7, z: 0.6 },
+    { y: 3.2,  x: 1.7,  z: 0.0 },
+    { y: 1.2,  x: -1.5, z: -0.6 },
+    { y: -0.8, x: 1.5,  z: -1.2 },
   ];
 
   return (
     <group position={position}>
-      {/* Vertical Fall Guide Rail Beams */}
-      <mesh position={[-4.2, 3.5, 0]}>
-        <cylinderGeometry args={[0.02, 0.02, 22, 16]} />
-        <meshBasicMaterial color="rgba(255, 255, 255, 0.15)" transparent opacity={0.3} />
-      </mesh>
-      <mesh position={[4.2, 3.5, 0]}>
-        <cylinderGeometry args={[0.02, 0.02, 22, 16]} />
-        <meshBasicMaterial color="rgba(255, 255, 255, 0.15)" transparent opacity={0.3} />
+      {/* 1. Architectural Showcase Skyscraper Tower Body */}
+      <mesh position={[0, 2.2, -1.8]} receiveShadow>
+        <boxGeometry args={[8.8, 15, 3.8]} />
+        <meshStandardMaterial
+          color={isObsidian ? '#0a0c14' : '#dedad2'}
+          metalness={0.92}
+          roughness={0.18}
+          wireframe={wireframeMode}
+        />
       </mesh>
 
-      {/* Floating 3D Project Slabs */}
+      {/* 2. Glass Curtain Wall Edge Accents on Tower */}
+      <mesh position={[0, 2.2, 0.12]}>
+        <planeGeometry args={[8.6, 14.8]} />
+        <meshStandardMaterial
+          color={isObsidian ? '#002244' : '#bcd4e6'}
+          metalness={0.9}
+          roughness={0.1}
+          transparent
+          opacity={isObsidian ? 0.35 : 0.2}
+        />
+      </mesh>
+
+      {/* 3. Floating 3D Project Glass Slabs mounted on the skyscraper */}
       {projects.map((proj, idx) => {
-        const cfg = SLAB_CONFIGS[idx] || { y: -3 - idx * 4, x: 0, z: 0 };
+        const cfg = SLAB_CONFIGS[idx] || { y: -idx * 2, x: 0, z: 0 };
         return (
           <ProjectGlassSlab
             key={proj.id}

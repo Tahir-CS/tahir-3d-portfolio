@@ -30,7 +30,7 @@ export function SkillsOverlay() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pointer-events-auto border-b border-[var(--hud-line)] pb-4">
         <div className="space-y-1">
           <span className={`font-mono text-[10px] font-bold uppercase tracking-[0.25em] ${accentText}`}>
-            03 // LIQUID INFRASTRUCTURE · SIDEWAYS TRACKING FLIGHT
+            03 // DISTRIBUTED SYSTEMS MESH · CITY AVENUE FLIGHT
           </span>
           <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)]">
             Distributed Systems Mesh
@@ -58,7 +58,7 @@ export function SkillsOverlay() {
         </div>
       </div>
 
-      {/* Center Void: Wide open for Liquid Chrome Ocean + 3D Monoliths */}
+      {/* Center Void: Wide open for City Avenue & 3D Skyscraper Mega-Displays */}
       <div className="my-auto py-12" />
 
       {/* Bottom Skill HUD — no box, just flowing chips on transparent bg */}
@@ -70,11 +70,11 @@ export function SkillsOverlay() {
             <span>
               LIVE TELEMETRY:{' '}
               <span className={`font-bold ${accentText}`}>
-                {hoveredSkill ? `INSPECTING [ ${hoveredSkill.toUpperCase()} ]` : '7 TITANIUM MONOLITHS ACTIVE'}
+                {hoveredSkill ? `INSPECTING [ ${hoveredSkill.toUpperCase()} ]` : '7 ARCHITECTURAL PILLARS ACTIVE'}
               </span>
             </span>
           </div>
-          <span className="hidden sm:inline">REFLECTIVE OCEAN RUNTIME // 60 FPS</span>
+          <span className="hidden sm:inline">CITY MEGA-DISPLAY RUNTIME // 60 FPS</span>
         </div>
 
         {/* Skill chips — no surrounding card, just chips directly on transparent canvas */}

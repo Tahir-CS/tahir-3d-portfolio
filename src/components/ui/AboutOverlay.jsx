@@ -114,7 +114,7 @@ export function AboutOverlay() {
       {/* Bottom Hint */}
       <div className="pointer-events-auto flex items-center justify-between text-[10px] font-mono text-[var(--text-muted)] border-t border-[var(--hud-line)] pt-4">
         <span>INTERACTIVE TERMINAL DISPLAYED DIRECTLY IN 3D SCREEN</span>
-        <span className="animate-pulse">SCROLL TO FLY INTO LIQUID CHROME OCEAN →</span>
+        <span className="animate-pulse">SCROLL TO FLY INTO CYBER CITY AVENUE →</span>
       </div>
     </section>
   );

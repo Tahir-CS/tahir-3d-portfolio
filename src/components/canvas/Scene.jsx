@@ -5,7 +5,7 @@ import { CameraRig } from './CameraRig';
 import { Effects } from './Effects';
 import { DataParticles } from './DataParticles';
 import { InteractiveWorkstation } from './models/InteractiveWorkstation';
-import { LiquidChromeOcean } from './models/LiquidChromeOcean';
+import { CityAvenueDistrict } from './models/CityAvenueDistrict';
 import { ProjectChasm } from './models/ProjectChasm';
 import { SpaceBeacon } from './models/SpaceBeacon';
 import { RealisticCity } from './models/RealisticCity';
@@ -107,31 +107,31 @@ function SceneContent() {
         </Suspense>
       </ModelErrorBoundary>
 
-      {/* 6. Realistic 3D City & Billboard Screens (Procedural CityScape fallback while GLB streams) */}
+      {/* 6. Realistic 3D City & Billboard Screens (allBuildings.glb & Sky-High Displays) */}
       <ModelErrorBoundary fallback={<CityScape position={[0, -1.5, -6]} />}>
         <Suspense fallback={<CityScape position={[0, -1.5, -6]} />}>
-          <RealisticCity position={[0, -1.5, -16]} />
+          <RealisticCity position={[0, -1.5, -15]} />
         </Suspense>
       </ModelErrorBoundary>
 
-      {/* 7. Section 3: Ocean Surface & Monoliths */}
+      {/* 7. Section 3: Cyber City Avenue & Tech Monolith Columns (Zero water) */}
       <ModelErrorBoundary fallback={null}>
         <Suspense fallback={null}>
-          <LiquidChromeOcean position={[0, -0.6, -11]} />
+          <CityAvenueDistrict position={[0, -1.2, -10.5]} />
         </Suspense>
       </ModelErrorBoundary>
 
-      {/* 8. Section 4: Vertical Free-Fall Descent & 3D Glass Project Slabs */}
+      {/* 8. Section 4: Project Skyscraper Showcase Facade & Glass Displays */}
       <ModelErrorBoundary fallback={null}>
         <Suspense fallback={null}>
           <ProjectChasm
-            position={[0, 0, 0]}
+            position={[0, 0, -18.5]}
             onSelectProject={(proj) => setSelectedProject(proj)}
           />
         </Suspense>
       </ModelErrorBoundary>
 
-      {/* 9. Section 5: Deep Space Orbital Transmission Beacon */}
+      {/* 9. Section 5: Skyscraper Summit Observation Deck & Broadcast Terminal */}
       <ModelErrorBoundary fallback={null}>
         <Suspense fallback={null}>
           <SpaceBeacon position={[0, 0, -25]} />

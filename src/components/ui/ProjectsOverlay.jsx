@@ -35,14 +35,14 @@ export function ProjectsOverlay() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pointer-events-auto border-b border-[var(--hud-line)] pb-4">
         <div className="space-y-1">
           <span className={`font-mono text-[10px] font-bold uppercase tracking-[0.25em] ${accentText}`}>
-            04 // VERTICAL FREE-FALL · CAMERA DESCENDING CHASM
+            04 // SKYSCRAPER PLAZA · ARCHITECTURAL PROJECT SCREENS
           </span>
           <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)]">
             Production Deployments
           </h2>
         </div>
         <span className="text-[10px] font-mono text-[var(--text-muted)] md:text-right pointer-events-auto">
-          CLICK ANY 3D GLASS SLAB TO INSPECT SPEC
+          CLICK ANY SKYSCRAPER SCREEN TO INSPECT SPEC
         </span>
       </div>
 
@@ -122,8 +122,8 @@ export function ProjectsOverlay() {
 
       {/* Bottom Hint */}
       <div className="pointer-events-auto flex items-center justify-between text-[10px] font-mono text-[var(--text-muted)] border-t border-[var(--hud-line)] pt-4">
-        <span>VERTICAL PLUMMET // 4 PHYSICAL GLASS SLABS IN CHASM</span>
-        <span className="animate-pulse">SCROLL TO ORBIT INTO DEEP SPACE BEACON →</span>
+        <span>SKYSCRAPER FACADE // 4 INTERACTIVE PRODUCTION SCREENS</span>
+        <span className="animate-pulse">SCROLL TO ASCEND TO SUMMIT BROADCAST TERMINAL →</span>
       </div>
     </section>
   );
