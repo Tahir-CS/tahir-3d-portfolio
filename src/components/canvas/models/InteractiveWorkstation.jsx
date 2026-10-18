@@ -86,7 +86,7 @@ export function InteractiveWorkstation({ position = [0, 0, 0] }) {
       {/* In-World 3D Screen Interface (Pinned directly to the laptop display) */}
       <Html
         transform
-        occlude="blending"
+        distanceFactor={1.15}
         position={[0, 0.72, -0.92]}
         rotation={[-0.18, 0, 0]}
         scale={0.132}
@@ -276,7 +276,7 @@ function StudioDisplay({ isObsidian, wireframeMode, setFocusedTarget }) {
       {/* Screen Interface Pinned on Display */}
       <Html
         transform
-        occlude="blending"
+        distanceFactor={1.2}
         position={[0, 0.62, 0.05]}
         scale={0.092}
         className="pointer-events-auto select-none"

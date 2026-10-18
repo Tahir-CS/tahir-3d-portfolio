@@ -1,6 +1,5 @@
 import React from 'react';
-import { EffectComposer, Bloom, Vignette, ChromaticAberration, Noise } from '@react-three/postprocessing';
-import * as THREE from 'three';
+import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import { useScrollProgress } from '../../context/ScrollContext';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -13,7 +12,7 @@ import { useScrollProgress } from '../../context/ScrollContext';
 // ─────────────────────────────────────────────────────────────────────────────
 
 export function Effects() {
-  const { theme, wireframeMode } = useScrollProgress();
+  const { theme } = useScrollProgress();
   const isObsidian = theme === 'obsidian';
 
   return (
@@ -24,16 +23,6 @@ export function Effects() {
         luminanceSmoothing={0.25}
         intensity={isObsidian ? 0.85 : 0.45}
         mipmapBlur
-      />
-
-      {/* Subtle Analog Film Grain */}
-      <Noise opacity={isObsidian ? 0.025 : 0.018} />
-
-      {/* Cinematic Edge Chromatic Aberration */}
-      <ChromaticAberration
-        offset={new THREE.Vector2(0.0006, 0.0006)}
-        radialModulation={true}
-        modulationOffset={0.4}
       />
 
       {/* Editorial Vignette */}

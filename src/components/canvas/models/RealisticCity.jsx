@@ -20,8 +20,8 @@ export function RealisticCity({ position = [0, -1.5, -15], scale = 0.16 }) {
     const clone = scene.clone(true);
     clone.traverse((child) => {
       if (child.isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
+        child.castShadow = false;
+        child.receiveShadow = false;
         if (child.material) {
           child.material = child.material.clone();
           if (wireframeMode) {
@@ -149,7 +149,7 @@ function RooftopOutdoorBillboard({ position, rotation, scale, isObsidian, onFocu
       {/* Diegetic 3D Billboard Screen Mounted onto outdoor_billboard.glb */}
       <Html
         transform
-        occlude="blending"
+        distanceFactor={1.3}
         position={[0, 0.35, 0.12]}
         scale={0.11}
         className="pointer-events-auto select-none"

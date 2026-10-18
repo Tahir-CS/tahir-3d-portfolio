@@ -122,13 +122,15 @@ export function ProjectShaderPlane({ imageUrl, position = [0, 0, 0], rotation = 
       scrollDelta * 40,
       1 - Math.exp(-10 * delta)
     );
+  });
 
-    // Bind loaded texture
-    if (texture) {
+  // Bind loaded texture once on change
+  useEffect(() => {
+    if (materialRef.current && texture) {
       materialRef.current.uTexture = texture;
       materialRef.current.uHasTexture = 1.0;
     }
-  });
+  }, [texture]);
 
   return (
     <mesh
@@ -149,7 +151,7 @@ export function ProjectShaderPlane({ imageUrl, position = [0, 0, 0], rotation = 
         if (onSelect) onSelect();
       }}
     >
-      <planeGeometry args={[3.8, 2.1, 32, 32]} />
+      <planeGeometry args={[3.8, 2.1, 16, 16]} />
       <projectDistortMaterial ref={materialRef} transparent />
     </mesh>
   );

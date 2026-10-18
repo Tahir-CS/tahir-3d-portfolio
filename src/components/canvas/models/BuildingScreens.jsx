@@ -76,7 +76,7 @@ export function BuildingScreens({ position = [0, 5.2, -15.5], rotation = [0, 0, 
       {/* 4. Giant In-World Interactive LED Billboard (Html transform) */}
       <Html
         transform
-        occlude="blending"
+        distanceFactor={1.3}
         position={[0, 0, 0.08]}
         scale={scale}
         className="pointer-events-auto select-none"
@@ -221,7 +221,7 @@ export function SideBillboardScreen({ position = [6.8, 4.2, -14.2], rotation = [
       </mesh>
 
       {/* Screen */}
-      <Html transform occlude="blending" position={[0, 0, 0.08]} scale={scale} className="pointer-events-auto select-none">
+      <Html transform distanceFactor={1.2} position={[0, 0, 0.08]} scale={scale} className="pointer-events-auto select-none">
         <div
           className={`w-[360px] h-[640px] rounded-lg border-2 p-5 shadow-2xl flex flex-col justify-between font-mono ${
             isObsidian

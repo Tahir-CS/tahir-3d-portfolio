@@ -20,16 +20,11 @@ export function DataParticles({ count = 800, area = [24, 12, 50] }) {
     return [pos, spd, ph];
   }, [count, area]);
 
-  useFrame((_, delta) => {
+  useFrame((state, delta) => {
     if (!pointsRef.current) return;
-    const posArray = pointsRef.current.geometry.attributes.position.array;
-    for (let i = 0; i < count; i++) {
-      posArray[i * 3 + 1] += speeds[i] * delta;
-      if (posArray[i * 3 + 1] > area[1]) {
-        posArray[i * 3 + 1] = 0.1;
-      }
-    }
-    pointsRef.current.geometry.attributes.position.needsUpdate = true;
+    // Elegant organic drift without CPU buffer re-upload overhead
+    pointsRef.current.rotation.y = state.clock.elapsedTime * 0.015;
+    pointsRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.4;
   });
 
   return (

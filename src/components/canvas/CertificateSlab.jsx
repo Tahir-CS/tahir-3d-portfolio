@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { RoundedBox, MeshTransmissionMaterial, Text } from '@react-three/drei';
+import { RoundedBox, Text } from '@react-three/drei';
 import * as THREE from 'three';
 import { useScrollProgress } from '../../context/ScrollContext';
 import { sound } from '../../utils/soundEngine';
@@ -103,26 +103,20 @@ export function CertificateSlab({
         </mesh>
       )}
 
-      {/* 2. Outer Refractive Physical Acrylic Glass Slab */}
-      <RoundedBox args={[2.45, 1.8, 0.16]} radius={0.06} smoothness={4} castShadow receiveShadow>
+      {/* 2. Outer Sleek Physical Acrylic Glass Slab (High-Performance, 0 FBO overhead) */}
+      <RoundedBox args={[2.45, 1.8, 0.16]} radius={0.06} smoothness={2}>
         {wireframeMode ? (
           <meshBasicMaterial color="#00ff88" wireframe />
         ) : (
-          <MeshTransmissionMaterial
-            backside
-            samples={6}
-            thickness={0.25}
-            chromaticAberration={0.04}
-            anisotropy={0.2}
-            distortion={0.08}
-            distortionScale={0.2}
-            temporalDistortion={0.08}
-            ior={1.48}
-            roughness={isObsidian ? 0.08 : 0.14}
-            metalness={isObsidian ? 0.15 : 0.05}
-            color={isObsidian ? '#0f172a' : '#f8fafc'}
+          <meshPhysicalMaterial
+            roughness={isObsidian ? 0.06 : 0.12}
+            metalness={isObsidian ? 0.25 : 0.1}
+            color={isObsidian ? '#0e1626' : '#ffffff'}
             transparent
-            opacity={0.92}
+            opacity={0.84}
+            reflectivity={0.9}
+            clearcoat={1.0}
+            clearcoatRoughness={0.08}
           />
         )}
       </RoundedBox>

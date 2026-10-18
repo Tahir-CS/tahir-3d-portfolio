@@ -35,17 +35,29 @@ export function ServerAisle({ position = [0, 0, -8], wireframe = false }) {
     return transforms;
   }, []);
 
-  useFrame(({ clock }) => {
-    if (!ledMeshRef.current) return;
-    const t = clock.getElapsedTime();
+  const lastUpdate = useRef(0);
 
+  // Initialize static matrix positions ONCE on mount
+  React.useEffect(() => {
+    if (!ledMeshRef.current) return;
     ledTransforms.forEach((led, i) => {
       dummy.position.set(...led.pos);
       dummy.scale.setScalar(0.045);
       dummy.updateMatrix();
       ledMeshRef.current.setMatrixAt(i, dummy.matrix);
+    });
+    ledMeshRef.current.instanceMatrix.needsUpdate = true;
+  }, [ledTransforms, dummy]);
 
-      // Procedural blink logic
+  useFrame(({ clock }) => {
+    if (!ledMeshRef.current) return;
+    const t = clock.getElapsedTime();
+
+    // Throttle blink calculation to 15 Hz for authentic retro server LED blinks and zero CPU drain
+    if (t - lastUpdate.current < 0.066) return;
+    lastUpdate.current = t;
+
+    ledTransforms.forEach((led, i) => {
       const blink = Math.sin(t * led.freq + led.phase) > 0.15 ? 1 : 0.08;
       const hex =
         led.colorType === 'cyan'
@@ -58,7 +70,6 @@ export function ServerAisle({ position = [0, 0, -8], wireframe = false }) {
       ledMeshRef.current.setColorAt(i, tempColor);
     });
 
-    ledMeshRef.current.instanceMatrix.needsUpdate = true;
     if (ledMeshRef.current.instanceColor) {
       ledMeshRef.current.instanceColor.needsUpdate = true;
     }

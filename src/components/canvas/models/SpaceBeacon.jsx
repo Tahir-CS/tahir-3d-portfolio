@@ -86,7 +86,7 @@ export function SpaceBeacon({ position = [0, 0, -25] }) {
       {/* 4. Interactive 3D Contact Console Embedded Inside the Rooftop Command Terminal */}
       <Html
         transform
-        occlude="blending"
+        distanceFactor={1.2}
         position={[0, 1.15, 0.15]}
         scale={0.115}
         className="pointer-events-auto select-none"

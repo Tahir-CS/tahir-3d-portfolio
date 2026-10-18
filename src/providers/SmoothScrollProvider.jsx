@@ -52,16 +52,24 @@ export function SmoothScrollProvider({ children }) {
       scrub: 0.1,
       onUpdate: (self) => {
         scrollProgress.current = self.progress;
-        setScrollPercent(Math.round(self.progress * 100));
+        const pct = Math.round(self.progress * 100);
+        setScrollPercent((prev) => (Math.abs(prev - pct) >= 2 ? pct : prev));
 
-        // Dynamic section detection
+        // Dynamic section detection (only set state when section truly changes)
         const p = self.progress;
-        if (p < 0.18) setActiveSection('hero');
-        else if (p < 0.38) setActiveSection('about');
-        else if (p < 0.58) setActiveSection('skills');
-        else if (p < 0.82) setActiveSection('projects');
-        else if (p < 0.92) setActiveSection('experience');
-        else setActiveSection('contact');
+        const nextSec =
+          p < 0.18
+            ? 'hero'
+            : p < 0.38
+            ? 'about'
+            : p < 0.58
+            ? 'skills'
+            : p < 0.82
+            ? 'projects'
+            : p < 0.92
+            ? 'experience'
+            : 'contact';
+        setActiveSection((prev) => (prev !== nextSec ? nextSec : prev));
       },
     });
 

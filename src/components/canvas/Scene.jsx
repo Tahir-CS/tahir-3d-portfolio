@@ -51,7 +51,6 @@ function SceneLighting() {
         position={[8, 14, 8]}
         intensity={isObsidian ? 2.0 : 1.5}
         color={wireframeMode ? '#00ff88' : isObsidian ? '#ffffff' : '#fffdfa'}
-        castShadow
       />
       <spotLight
         position={[-8, 6, -6]}
@@ -213,7 +212,7 @@ export function Scene() {
   return (
     <div className="fixed inset-0 z-0 pointer-events-auto w-screen h-screen">
       <Canvas
-        dpr={[1, 1.5]}
+        dpr={[1, 1.25]}
         gl={{
           antialias: true,
           powerPreference: 'high-performance',

@@ -52,15 +52,15 @@ function ProjectGlassSlab({ project, index, position, worldOffset, onSelect, onF
       }}
       onClick={handleClick}
     >
-      {/* 1. Frosted Physical Glass Monolith Frame */}
-      <mesh castShadow receiveShadow>
+      {/* 1. Sleek Physical Glass Monolith Frame (Zero FBO transmission overhead) */}
+      <mesh>
         <boxGeometry args={[4.4, 2.75, 0.14]} />
         <meshPhysicalMaterial
-          roughness={isObsidian ? 0.12 : 0.18}
-          metalness={isObsidian ? 0.85 : 0.4}
-          transmission={wireframeMode ? 0 : 0.78}
-          ior={1.45}
-          thickness={0.35}
+          roughness={isObsidian ? 0.08 : 0.14}
+          metalness={isObsidian ? 0.45 : 0.2}
+          clearcoat={0.9}
+          clearcoatRoughness={0.1}
+          reflectivity={0.8}
           color={
             wireframeMode
               ? '#00ff88'
@@ -74,7 +74,7 @@ function ProjectGlassSlab({ project, index, position, worldOffset, onSelect, onF
           }
           wireframe={wireframeMode}
           transparent
-          opacity={0.94}
+          opacity={0.88}
         />
       </mesh>
 
