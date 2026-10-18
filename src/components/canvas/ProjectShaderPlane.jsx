@@ -11,9 +11,12 @@ import { useScrollProgress } from '../../context/ScrollContext';
 // • Fragment: Interactive RGB chromatic aberration channel shift on scroll & hover
 // ─────────────────────────────────────────────────────────────────────────────
 
+const fallbackDataTex = new THREE.DataTexture(new Uint8Array([10, 15, 25, 255]), 1, 1);
+fallbackDataTex.needsUpdate = true;
+
 const ProjectDistortMaterial = shaderMaterial(
   {
-    uTexture: new THREE.Texture(),
+    uTexture: fallbackDataTex,
     uTime: 0,
     uHover: 0,
     uVelocity: 0,
