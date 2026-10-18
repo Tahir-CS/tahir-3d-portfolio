@@ -118,6 +118,7 @@ export const portfolioConfig = {
       title: "CareerOS",
       badge: "DEPLOYED REFERENCE BUILD",
       category: "CAREER WORKSPACE",
+      thumbnail: "/assets/careeros.png",
       description: "A career workspace with resume parsing, live job matching, and candidate profile tracking designed to find matching roles in seconds.",
       features: "RESUME PARSER • LIVE JOB SEARCH • QUEUE PIPELINE • PROFILE MATCHING",
       architecture: [
@@ -135,6 +136,7 @@ export const portfolioConfig = {
       title: "CreatorIQ",
       badge: "DEPLOYED REFERENCE BUILD",
       category: "CREATOR ANALYTICS",
+      thumbnail: "/assets/yt-analysis.png",
       description: "A YouTube channel analytics and sponsorship valuation platform built to project 48-hour video views and calculate fair sponsorship rates.",
       features: "CHANNEL ANALYTICS • SPONSORSHIP CALCULATOR • HOOK ANALYZER • METRICS INGESTION",
       architecture: [
@@ -152,6 +154,7 @@ export const portfolioConfig = {
       title: "Subscription Guardian",
       badge: "DEPLOYED REFERENCE BUILD",
       category: "BROWSER EXTENSION",
+      thumbnail: "/assets/subscription-guardian.png",
       description: "A private browser extension that tracks recurring charges, alerts you before free trials renew, and flags hidden fees directly during checkout.",
       features: "TRIAL ALERTS • RENEWAL REMINDERS • ZERO DATA TELEMETRY • DOM INSPECTOR",
       architecture: [
@@ -169,6 +172,7 @@ export const portfolioConfig = {
       title: "Modern E-Commerce Store",
       badge: "DEPLOYED REFERENCE BUILD",
       category: "COMMERCE PLATFORM",
+      thumbnail: "/assets/ecommerce-store.png",
       description: "A modern online storefront with real-time cart state, secure user authentication, product search, and verified Stripe checkout payments.",
       features: "PRODUCT CATALOG • REALTIME CART • STRIPE PAYMENTS • ROW-LEVEL SECURITY",
       architecture: [
@@ -180,6 +184,57 @@ export const portfolioConfig = {
       githubUrl: "https://github.com/Tahir-CS/E-commerse-store",
       liveUrl: "https://e-commerse-store-eta.vercel.app/",
       featured: true
+    },
+    {
+      index: "05",
+      title: "TrendVision Analytics",
+      badge: "ENGINEERING BUILD",
+      category: "PREDICTIVE ANALYTICS",
+      thumbnail: "/assets/trendvision.png",
+      description: "Algorithmic market trend forecasting engine processing social signals and time-series trade patterns.",
+      features: "TIME-SERIES ML • REALTIME WEBSOCKETS • HEATMAP VIZ • DRIFT DETECTION",
+      architecture: [
+        "Event-driven architecture streaming tick data over WebSocket multiplexers",
+        "In-memory Redis pipeline computing moving averages with sub-millisecond latency"
+      ],
+      techStack: ["React.js", "Python", "FastAPI", "Redis", "TimescaleDB"],
+      githubUrl: "https://github.com/Tahir-CS",
+      liveUrl: null,
+      featured: false
+    },
+    {
+      index: "06",
+      title: "AI Resume Analyzer",
+      badge: "ENGINEERING BUILD",
+      category: "LLM WORKSPACE",
+      thumbnail: "/assets/ai-resume-analyzer.png",
+      description: "Automated ATS resume parser scoring keyword density and semantic match against job descriptions using vector embeddings.",
+      features: "VECTOR SEARCH • ATS SCORING • PDF EXTRACTION • LATENCY < 400MS",
+      architecture: [
+        "LangChain pipeline with PGVector similarity search for candidate ranking",
+        "Zero-copy PDF byte parsing in worker threads"
+      ],
+      techStack: ["Next.js", "Node.js", "PGVector", "OpenAI API", "Tailwind CSS"],
+      githubUrl: "https://github.com/Tahir-CS",
+      liveUrl: null,
+      featured: false
+    },
+    {
+      index: "07",
+      title: "UET OpenCourseWare",
+      badge: "INSTITUTIONAL PLATFORM",
+      category: "ACADEMIC PORTAL",
+      thumbnail: "/assets/uet-ocw.png",
+      description: "University courseware distribution portal engineered during KICS internship with tiered role-based access for students and faculty.",
+      features: "ROLE RBAC • MEDIA STREAMING • COURSE REGISTRY • AUDIT LOGS",
+      architecture: [
+        "Next.js frontend connected with Laravel REST backend services",
+        "S3 presigned URLs for secure streaming of academic lecture materials"
+      ],
+      techStack: ["Next.js", "Laravel", "PostgreSQL", "AWS S3", "Docker"],
+      githubUrl: "https://github.com/Tahir-CS",
+      liveUrl: null,
+      featured: false
     }
   ],
 
@@ -224,35 +279,35 @@ export const portfolioConfig = {
       title: "IBM Backend Development Specialization",
       issuer: "IBM",
       date: "2024",
-      image: "/certificates/ibm-backend.png",
+      image: "/assets/certificates/ibm-backend.png",
       verifyUrl: "#"
     },
     {
       title: "Advanced React & Frontend Architecture",
       issuer: "Meta",
       date: "2024",
-      image: "/certificates/meta-react.png",
+      image: "/assets/certificates/meta-react.png",
       verifyUrl: "#"
     },
     {
       title: "AWS Cloud Practitioner Essentials",
       issuer: "Amazon Web Services",
       date: "2024",
-      image: "/certificates/aws.png",
+      image: "/assets/certificates/aws.png",
       verifyUrl: "#"
     },
     {
       title: "IBM Applied DevOps Engineering",
       issuer: "IBM",
       date: "2024",
-      image: "/certificates/ibm-devops.png",
+      image: "/assets/certificates/ibm-devops.png",
       verifyUrl: "#"
     },
     {
       title: "Full Stack MERN Developer Certificate",
       issuer: "Certificate",
       date: "2024",
-      image: "/certificates/mern.png",
+      image: "/assets/certificates/mern.png",
       verifyUrl: "#"
     }
   ]

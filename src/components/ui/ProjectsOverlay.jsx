@@ -15,14 +15,7 @@ export function ProjectsOverlay() {
     sound.playHoloEngage();
     setSelectedProject({
       ...proj,
-      image:
-        proj.index === '01'
-          ? '/assets/careeros.png'
-          : proj.index === '02'
-          ? '/assets/yt-analysis.png'
-          : proj.index === '03'
-          ? '/assets/subscription-guardian.png'
-          : '/assets/ecommerse store thumbnail .png',
+      image: proj.thumbnail || '/assets/careeros.png',
     });
   };
 

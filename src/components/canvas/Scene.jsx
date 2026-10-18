@@ -1,16 +1,18 @@
 import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { AdaptiveDpr, Environment } from '@react-three/drei';
+import { AdaptiveDpr, Environment, ContactShadows } from '@react-three/drei';
 import { CameraRig } from './CameraRig';
 import { Effects } from './Effects';
 import { DataParticles } from './DataParticles';
 import { InteractiveWorkstation } from './models/InteractiveWorkstation';
+import { CertificatesVault } from './CertificateSlab';
 import { CityAvenueDistrict } from './models/CityAvenueDistrict';
 import { ProjectChasm } from './models/ProjectChasm';
 import { SpaceBeacon } from './models/SpaceBeacon';
 import { RealisticCity } from './models/RealisticCity';
 import { CityScape } from './models/CityScape';
 import { useScrollProgress } from '../../context/ScrollContext';
+import { portfolioConfig } from '../../config/portfolio.config';
 
 // Isolated Error Boundary per model section so one model never breaks the scene
 class ModelErrorBoundary extends React.Component {
@@ -100,10 +102,30 @@ function SceneContent() {
         />
       </Suspense>
 
+      {/* Baked Workstation Ground Contact Shadows (frames={1} for zero runtime overhead) */}
+      <ContactShadows
+        position={[0, -1.78, 0]}
+        opacity={isObsidian ? 0.6 : 0.4}
+        scale={16}
+        blur={2.4}
+        far={4.5}
+        frames={1}
+      />
+
       {/* 5. Section 1 & 2: Realistic Workstation (MacBook Pro + Studio Monitor) */}
       <ModelErrorBoundary fallback={null}>
         <Suspense fallback={null}>
           <InteractiveWorkstation position={[0, 0, 0]} />
+        </Suspense>
+      </ModelErrorBoundary>
+
+      {/* 5b. Refractive Acrylic Certificate Vault Monoliths (Chapter 2 Pedigree) */}
+      <ModelErrorBoundary fallback={null}>
+        <Suspense fallback={null}>
+          <CertificatesVault
+            certificates={portfolioConfig.certifications}
+            position={[0, -0.4, -2.5]}
+          />
         </Suspense>
       </ModelErrorBoundary>
 

@@ -28,7 +28,7 @@ const PROJECTS_DATA = [
   {
     title: 'Modern E-Commerce Store',
     category: 'COMMERCE PLATFORM // SUPABASE',
-    image: '/assets/ecommerse store thumbnail .png',
+    image: '/assets/ecommerce-store.png',
     accent: '#ffaa00',
     pos: [0, 0, -13.5],
   },

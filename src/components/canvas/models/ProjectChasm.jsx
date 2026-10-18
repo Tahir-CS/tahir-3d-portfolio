@@ -4,6 +4,7 @@ import { Text } from '@react-three/drei';
 import * as THREE from 'three';
 import { useScrollProgress } from '../../../context/ScrollContext';
 import { portfolioConfig } from '../../../config/portfolio.config';
+import { ProjectShaderPlane } from '../ProjectShaderPlane';
 
 function ProjectGlassSlab({ project, index, position, onSelect }) {
   const { theme, wireframeMode } = useScrollProgress();
@@ -100,12 +101,14 @@ function ProjectGlassSlab({ project, index, position, onSelect }) {
         />
       </lineSegments>
 
-      {/* 3. Project Screenshot Display Quad */}
-      {texture && !wireframeMode && (
-        <mesh position={[0, 0.35, 0.07]}>
-          <planeGeometry args={[3.9, 1.6]} />
-          <meshBasicMaterial map={texture} transparent opacity={0.95} />
-        </mesh>
+      {/* 3. Project GLSL Distort Shader Display Quad */}
+      {!wireframeMode && (
+        <ProjectShaderPlane
+          imageUrl={project.thumbnail}
+          position={[0, 0.35, 0.08]}
+          scale={[1, 1, 1]}
+          onSelect={() => onSelect && onSelect(project)}
+        />
       )}
 
       {/* 4. 3D Typography Etched onto Glass */}
