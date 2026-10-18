@@ -11,6 +11,9 @@ import { ProjectChasm } from './models/ProjectChasm';
 import { SpaceBeacon } from './models/SpaceBeacon';
 import { RealisticCity } from './models/RealisticCity';
 import { CityScape } from './models/CityScape';
+import { ServerAisle } from './models/ServerAisle';
+import { ControlRoom } from './models/ControlRoom';
+import { GlowingConduit } from './models/GlowingConduit';
 import { useScrollProgress } from '../../context/ScrollContext';
 import { portfolioConfig } from '../../config/portfolio.config';
 
@@ -41,7 +44,7 @@ function SceneLighting() {
   return (
     <>
       <ambientLight
-        intensity={wireframeMode ? 0.7 : isObsidian ? 0.5 : 0.9}
+        intensity={wireframeMode ? 0.7 : isObsidian ? 0.55 : 0.9}
         color={wireframeMode ? '#00ff88' : isObsidian ? '#0f1016' : '#fff7ed'}
       />
       <directionalLight
@@ -85,16 +88,16 @@ function SceneContent() {
 
   return (
     <>
-      {/* 1. Camera Choreography (Never blocked by Suspense) */}
+      {/* 1. Camera Choreography & Click-to-Zoom Engine */}
       <CameraRig />
 
-      {/* 2. Dynamic Lighting Engine (Instant frame 1 illumination) */}
+      {/* 2. Dynamic Lighting Engine */}
       <SceneLighting />
 
       {/* 3. Floating Starlight & Data Stream Particles */}
-      <DataParticles count={wireframeMode ? 700 : 450} />
+      <DataParticles count={wireframeMode ? 700 : 500} />
 
-      {/* 4. HDR Environment Probe (Isolated Suspense) */}
+      {/* 4. HDR Environment Probe */}
       <Suspense fallback={null}>
         <Environment
           files={isObsidian ? '/models/city.hdr' : '/models/studio.hdr'}
@@ -102,7 +105,7 @@ function SceneContent() {
         />
       </Suspense>
 
-      {/* Baked Workstation Ground Contact Shadows (frames={1} for zero runtime overhead) */}
+      {/* Baked Workstation Ground Contact Shadows */}
       <ContactShadows
         position={[0, -1.78, 0]}
         opacity={isObsidian ? 0.6 : 0.4}
@@ -112,38 +115,60 @@ function SceneContent() {
         frames={1}
       />
 
-      {/* 5. Section 1 & 2: Realistic Workstation (MacBook Pro + Studio Monitor) */}
+      {/* 5. Zone 1: Realistic Workstation (macbook.glb + studio_monitor.glb) + Hologram ControlRoom */}
       <ModelErrorBoundary fallback={null}>
         <Suspense fallback={null}>
           <InteractiveWorkstation position={[0, 0, 0]} />
+          <ControlRoom position={[-4.2, -1.2, -1.2]} wireframe={wireframeMode} />
         </Suspense>
       </ModelErrorBoundary>
 
-      {/* 5b. Refractive Acrylic Certificate Vault Monoliths (Chapter 2 Pedigree) */}
+      {/* 6. Zone 2: Refractive Acrylic Certificate Vault + 112-LED ServerAisle + GlowingConduits */}
       <ModelErrorBoundary fallback={null}>
         <Suspense fallback={null}>
           <CertificatesVault
             certificates={portfolioConfig.certifications}
             position={[0, -0.4, -2.5]}
           />
+          <ServerAisle position={[0, -1.5, -4.5]} wireframe={wireframeMode} />
+          <GlowingConduit
+            points={[
+              [-1.5, -0.8, 0],
+              [-2.8, -1.0, -5],
+              [-2.5, -0.5, -12],
+              [-1.8, 1.0, -18.5],
+              [0, 0.2, -25],
+            ]}
+            color="#00f0ff"
+          />
+          <GlowingConduit
+            points={[
+              [1.5, -0.8, 0],
+              [2.8, -1.0, -5],
+              [2.5, -0.5, -12],
+              [1.8, 1.0, -18.5],
+              [0, 0.2, -25],
+            ]}
+            color="#00ff88"
+          />
         </Suspense>
       </ModelErrorBoundary>
 
-      {/* 6. Realistic 3D City & Billboard Screens (allBuildings.glb & Sky-High Displays) */}
+      {/* 7. Zone 3: Authentic 3D Building City Block (allBuildings.glb + outdoor_billboard.glb + BuildingScreens) */}
       <ModelErrorBoundary fallback={<CityScape position={[0, -1.5, -6]} />}>
         <Suspense fallback={<CityScape position={[0, -1.5, -6]} />}>
           <RealisticCity position={[0, -1.5, -15]} />
         </Suspense>
       </ModelErrorBoundary>
 
-      {/* 7. Section 3: Cyber City Avenue & Tech Monolith Columns (Zero water) */}
+      {/* 8. Zone 3b: Cyber City Avenue & 7 Illuminated Tech Monolith Pillars */}
       <ModelErrorBoundary fallback={null}>
         <Suspense fallback={null}>
           <CityAvenueDistrict position={[0, -1.2, -10.5]} />
         </Suspense>
       </ModelErrorBoundary>
 
-      {/* 8. Section 4: Project Skyscraper Showcase Facade & Glass Displays */}
+      {/* 9. Zone 4: Project Skyscraper Showcase Facade (All 7 Glass Monoliths) */}
       <ModelErrorBoundary fallback={null}>
         <Suspense fallback={null}>
           <ProjectChasm
@@ -153,17 +178,17 @@ function SceneContent() {
         </Suspense>
       </ModelErrorBoundary>
 
-      {/* 9. Section 5: Skyscraper Summit Observation Deck & Broadcast Terminal */}
+      {/* 10. Zone 5: Skyscraper Summit Observation Deck + 3D CommandTerminal Contact Uplink */}
       <ModelErrorBoundary fallback={null}>
         <Suspense fallback={null}>
           <SpaceBeacon position={[0, 0, -25]} />
         </Suspense>
       </ModelErrorBoundary>
 
-      {/* 10. Postprocessing Pass */}
+      {/* 11. Editorial Postprocessing Pass */}
       <Effects />
 
-      {/* 11. Dynamic Performance Scaling */}
+      {/* 12. Dynamic Performance Scaling */}
       <AdaptiveDpr pixelated />
     </>
   );
@@ -186,7 +211,7 @@ export function Scene() {
     : '#f6f3eb';
 
   return (
-    <div className="fixed inset-0 z-0 pointer-events-none w-screen h-screen">
+    <div className="fixed inset-0 z-0 pointer-events-auto w-screen h-screen">
       <Canvas
         dpr={[1, 1.5]}
         gl={{
@@ -198,7 +223,7 @@ export function Scene() {
         camera={{ fov: 45, near: 0.1, far: 80, position: [0, 1.4, 5.2] }}
       >
         <color attach="background" args={[bgColor]} />
-        <fog attach="fog" args={[fogColor, 8, 36]} />
+        <fog attach="fog" args={[fogColor, 8, 38]} />
 
         <SceneContent />
       </Canvas>

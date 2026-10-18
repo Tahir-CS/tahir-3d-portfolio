@@ -3,17 +3,24 @@ import { useFrame } from '@react-three/fiber';
 import { RoundedBox, MeshTransmissionMaterial, Text } from '@react-three/drei';
 import * as THREE from 'three';
 import { useScrollProgress } from '../../context/ScrollContext';
+import { sound } from '../../utils/soundEngine';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CertificateSlab — Awwwards SOTD Refractive Glass Acrylic Monolith
 // Features:
 // • Inner high-resolution certificate texture
 // • Outer physical refractive glass casing with chromatic dispersion & transmission
-// • Floating hover tilt and specular rim
+// • Floating hover tilt, specular rim & Click-to-Zoom camera focus
 // ─────────────────────────────────────────────────────────────────────────────
 
-export function CertificateSlab({ cert, position = [0, 0, 0], rotation = [0, 0, 0], scale = [1, 1, 1] }) {
-  const { theme, wireframeMode } = useScrollProgress();
+export function CertificateSlab({
+  cert,
+  position = [0, 0, 0],
+  rotation = [0, 0, 0],
+  scale = [1, 1, 1],
+  worldOffset = [0, 0, 0],
+}) {
+  const { theme, wireframeMode, setFocusedTarget } = useScrollProgress();
   const groupRef = useRef();
   const [hovered, setHovered] = useState(false);
   const [texture, setTexture] = useState(null);
@@ -56,15 +63,31 @@ export function CertificateSlab({ cert, position = [0, 0, 0], rotation = [0, 0, 
     }
   });
 
+  const handleClick = (e) => {
+    e.stopPropagation();
+    sound.playHoloEngage();
+    const worldX = worldOffset[0] + position[0];
+    const worldY = worldOffset[1] + position[1];
+    const worldZ = worldOffset[2] + position[2];
+    setFocusedTarget({
+      title: `CREDENTIAL // ${cert.title.toUpperCase()}`,
+      sub: `${cert.issuer || 'VERIFIED CREDENTIAL'} // ${cert.date || '2024'}`,
+      pos: [worldX, worldY, worldZ + 2.4],
+      lookAt: [worldX, worldY, worldZ],
+    });
+  };
+
   return (
     <group
       ref={groupRef}
       position={position}
       rotation={rotation}
       scale={scale}
+      onClick={handleClick}
       onPointerOver={(e) => {
         e.stopPropagation();
         document.body.style.cursor = 'pointer';
+        sound.playClick(1.3);
         setHovered(true);
       }}
       onPointerOut={() => {
@@ -158,6 +181,7 @@ export function CertificatesVault({ position = [0, 0, -2.5], certificates = [] }
             position={[cfg.x, cfg.y, cfg.z]}
             rotation={[0, cfg.rotY, 0]}
             scale={[0.85, 0.85, 0.85]}
+            worldOffset={position}
           />
         );
       })}

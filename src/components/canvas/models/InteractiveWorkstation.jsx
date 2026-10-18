@@ -6,7 +6,7 @@ import { useScrollProgress } from '../../../context/ScrollContext';
 import { Terminal, Cpu, ShieldCheck, Activity } from 'lucide-react';
 
 export function InteractiveWorkstation({ position = [0, 0, 0] }) {
-  const { theme, wireframeMode, scrollPercent } = useScrollProgress();
+  const { theme, wireframeMode, scrollPercent, setFocusedTarget } = useScrollProgress();
   const groupRef = useRef();
   const [activeTab, setActiveTab] = useState('arch');
   const isObsidian = theme === 'obsidian';
@@ -63,13 +63,25 @@ export function InteractiveWorkstation({ position = [0, 0, 0] }) {
 
   return (
     <group ref={groupRef} position={position}>
-      {/* 3D Realistic MacBook Pro Model */}
-      <primitive
-        object={clonedScene}
-        scale={0.11}
-        position={[0, -0.4, 0]}
-        rotation={[0.08, 0, 0]}
-      />
+      {/* 3D Realistic MacBook Pro Model with Click-to-Zoom */}
+      <group
+        onClick={(e) => {
+          e.stopPropagation();
+          setFocusedTarget({
+            title: 'MACBOOK PRO M3 // KERNEL ARCHITECTURE TERMINAL',
+            sub: 'Interactive 3D Screen Locked',
+            pos: [0, 0.82, 0.55],
+            lookAt: [0, 0.68, -0.92],
+          });
+        }}
+      >
+        <primitive
+          object={clonedScene}
+          scale={0.11}
+          position={[0, -0.4, 0]}
+          rotation={[0.08, 0, 0]}
+        />
+      </group>
 
       {/* In-World 3D Screen Interface (Pinned directly to the laptop display) */}
       <Html
@@ -207,12 +219,16 @@ export function InteractiveWorkstation({ position = [0, 0, 0] }) {
       </Html>
 
       {/* Companion Studio Monitor Display */}
-      <StudioDisplay isObsidian={isObsidian} wireframeMode={wireframeMode} />
+      <StudioDisplay
+        isObsidian={isObsidian}
+        wireframeMode={wireframeMode}
+        setFocusedTarget={setFocusedTarget}
+      />
     </group>
   );
 }
 
-function StudioDisplay({ isObsidian, wireframeMode }) {
+function StudioDisplay({ isObsidian, wireframeMode, setFocusedTarget }) {
   const { scene } = useGLTF('/models/studio_monitor.glb');
   const clonedMonitor = useMemo(() => {
     const clone = scene.clone(true);
@@ -241,7 +257,19 @@ function StudioDisplay({ isObsidian, wireframeMode }) {
   }, [scene, isObsidian, wireframeMode]);
 
   return (
-    <group position={[1.4, -0.4, -0.2]} rotation={[0, -0.32, 0]}>
+    <group
+      position={[1.4, -0.4, -0.2]}
+      rotation={[0, -0.32, 0]}
+      onClick={(e) => {
+        e.stopPropagation();
+        setFocusedTarget?.({
+          title: 'STUDIO MONITOR // GRAFANA CLUSTER TELEMETRY',
+          sub: '142K RPS // 99.999% Uptime',
+          pos: [0.85, 0.32, 1.05],
+          lookAt: [1.4, 0.22, -0.15],
+        });
+      }}
+    >
       {/* 3D Monitor Hardware */}
       <primitive object={clonedMonitor} scale={0.38} />
 
