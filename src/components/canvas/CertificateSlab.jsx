@@ -1,33 +1,24 @@
+// src/components/canvas/CertificateSlab.jsx
 import React, { useRef, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { RoundedBox, Text } from '@react-three/drei';
+import { RoundedBox, MeshTransmissionMaterial, Text } from '@react-three/drei';
 import * as THREE from 'three';
 import { useScrollProgress } from '../../context/ScrollContext';
 import { sound } from '../../utils/soundEngine';
 
-// ─────────────────────────────────────────────────────────────────────────────
-// CertificateSlab — Awwwards SOTD Refractive Glass Acrylic Monolith
-// Features:
-// • Inner high-resolution certificate texture
-// • Outer physical refractive glass casing with chromatic dispersion & transmission
-// • Floating hover tilt, specular rim & Click-to-Zoom camera focus
-// ─────────────────────────────────────────────────────────────────────────────
-
 export function CertificateSlab({
   cert,
   position = [0, 0, 0],
+  vaultPosition = [0, -0.4, -2.5],
   rotation = [0, 0, 0],
   scale = [1, 1, 1],
-  worldOffset = [0, 0, 0],
 }) {
   const { theme, wireframeMode, setFocusedTarget } = useScrollProgress();
   const groupRef = useRef();
   const [hovered, setHovered] = useState(false);
   const [texture, setTexture] = useState(null);
-
   const isObsidian = theme === 'obsidian';
 
-  // Safe async texture loading
   useEffect(() => {
     if (cert.image) {
       const loader = new THREE.TextureLoader();
@@ -45,35 +36,50 @@ export function CertificateSlab({
     }
   }, [cert.image]);
 
-  useFrame((state, delta) => {
+  useFrame((state) => {
     if (!groupRef.current) return;
     const t = state.clock.elapsedTime;
 
-    // Gentle physical float breathing
     const targetY = position[1] + Math.sin(t * 1.5 + position[0]) * 0.04;
     groupRef.current.position.y = THREE.MathUtils.lerp(groupRef.current.position.y, targetY, 0.1);
 
-    // Hover response
     if (hovered) {
       groupRef.current.scale.lerp(new THREE.Vector3(1.06, 1.06, 1.06), 0.15);
-      groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, rotation[1] + 0.12, 0.1);
+      groupRef.current.rotation.y = THREE.MathUtils.lerp(
+        groupRef.current.rotation.y,
+        rotation[1] + 0.08,
+        0.1
+      );
     } else {
-      groupRef.current.scale.lerp(new THREE.Vector3(1, 1, 1), 0.15);
-      groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, rotation[1], 0.1);
+      groupRef.current.scale.lerp(new THREE.Vector3(scale[0], scale[1], scale[2]), 0.15);
+      groupRef.current.rotation.y = THREE.MathUtils.lerp(
+        groupRef.current.rotation.y,
+        rotation[1],
+        0.1
+      );
     }
   });
 
-  const handleClick = (e) => {
+  const handleFocusCertificate = (e) => {
     e.stopPropagation();
     sound.playHoloEngage();
-    const worldX = worldOffset[0] + position[0];
-    const worldY = worldOffset[1] + position[1];
-    const worldZ = worldOffset[2] + position[2];
+
+    // Calculate world coordinates of this certificate slab
+    const wx = vaultPosition[0] + position[0];
+    const wy = vaultPosition[1] + position[1];
+    const wz = vaultPosition[2] + position[2];
+
+    // Offset camera 2.1 units along the slab's rotated front normal vector
+    const rotY = rotation[1] || 0;
+    const dist = 2.1;
+    const camX = wx + Math.sin(rotY) * dist;
+    const camZ = wz + Math.cos(rotY) * dist;
+
     setFocusedTarget({
-      title: `CREDENTIAL // ${cert.title.toUpperCase()}`,
-      sub: `${cert.issuer || 'VERIFIED CREDENTIAL'} // ${cert.date || '2024'} (Press ESC to return)`,
-      pos: [worldX, worldY, worldZ + 2.2],
-      lookAt: [worldX, worldY, worldZ],
+      title: `VERIFIED CREDENTIAL // ${cert.title.toUpperCase()}`,
+      sub: `${cert.issuer} (${cert.date}) — Click ESC to return`,
+      pos: [camX, wy, camZ],
+      lookAt: [wx, wy, wz],
     });
   };
 
@@ -83,11 +89,11 @@ export function CertificateSlab({
       position={position}
       rotation={rotation}
       scale={scale}
-      onClick={handleClick}
+      onClick={handleFocusCertificate}
       onPointerOver={(e) => {
         e.stopPropagation();
         document.body.style.cursor = 'pointer';
-        sound.playClick(1.3);
+        sound.playClick(1.35);
         setHovered(true);
       }}
       onPointerOut={() => {
@@ -95,7 +101,7 @@ export function CertificateSlab({
         setHovered(false);
       }}
     >
-      {/* 1. Inner Certificate Document Plane */}
+      {/* 1. Inner High-Resolution Certificate Plane */}
       {texture && !wireframeMode && (
         <mesh position={[0, 0, 0]}>
           <planeGeometry args={[2.2, 1.55]} />
@@ -103,20 +109,26 @@ export function CertificateSlab({
         </mesh>
       )}
 
-      {/* 2. Outer Sleek Physical Acrylic Glass Slab (High-Performance, 0 FBO overhead) */}
-      <RoundedBox args={[2.45, 1.8, 0.16]} radius={0.06} smoothness={2}>
+      {/* 2. Outer Refractive Physical Acrylic Glass Slab */}
+      <RoundedBox args={[2.45, 1.8, 0.16]} radius={0.06} smoothness={4} castShadow receiveShadow>
         {wireframeMode ? (
           <meshBasicMaterial color="#00ff88" wireframe />
         ) : (
-          <meshPhysicalMaterial
-            roughness={isObsidian ? 0.06 : 0.12}
-            metalness={isObsidian ? 0.25 : 0.1}
-            color={isObsidian ? '#0e1626' : '#ffffff'}
+          <MeshTransmissionMaterial
+            backside
+            samples={6}
+            thickness={0.25}
+            chromaticAberration={0.04}
+            anisotropy={0.2}
+            distortion={0.08}
+            distortionScale={0.2}
+            temporalDistortion={0.08}
+            ior={1.48}
+            roughness={isObsidian ? 0.08 : 0.14}
+            metalness={isObsidian ? 0.15 : 0.05}
+            color={isObsidian ? '#0f172a' : '#f8fafc'}
             transparent
-            opacity={0.84}
-            reflectivity={0.9}
-            clearcoat={1.0}
-            clearcoatRoughness={0.08}
+            opacity={0.92}
           />
         )}
       </RoundedBox>
@@ -129,39 +141,52 @@ export function CertificateSlab({
             wireframeMode
               ? '#00ff88'
               : hovered
-              ? (isObsidian ? '#00f0ff' : '#d4af37')
-              : (isObsidian ? 'rgba(0, 240, 255, 0.25)' : 'rgba(180, 140, 60, 0.35)')
+              ? isObsidian
+                ? '#00f0ff'
+                : '#d4af37'
+              : isObsidian
+              ? 'rgba(0, 240, 255, 0.35)'
+              : 'rgba(180, 140, 60, 0.45)'
           }
         />
       </lineSegments>
 
-      {/* 4. Typographic Certificate Badge Label */}
+      {/* 4. Top 3D Title Etched Above Slab */}
       <Text
-        position={[0, -1.05, 0.1]}
+        position={[0, 1.06, 0.1]}
         fontSize={0.11}
+        color={isObsidian ? '#00f0ff' : '#b38b38'}
+        anchorX="center"
+        anchorY="middle"
+        letterSpacing={0.06}
+        fontWeight="bold"
+      >
+        {cert.title ? cert.title.toUpperCase() : 'CERTIFICATE'}
+      </Text>
+
+      {/* 5. Bottom Issuer & Action Prompt */}
+      <Text
+        position={[0, -1.06, 0.1]}
+        fontSize={0.095}
         color={isObsidian ? '#ffffff' : '#18181b'}
         anchorX="center"
         anchorY="middle"
-        letterSpacing={0.08}
+        letterSpacing={0.06}
         fontWeight="bold"
       >
-        {cert.issuer ? `${cert.issuer.toUpperCase()} // ${cert.date || '2024'}` : 'VERIFIED CREDENTIAL'}
+        {`${cert.issuer ? cert.issuer.toUpperCase() : 'VERIFIED'} // ${cert.date || '2024'} [CLICK TO ZOOM]`}
       </Text>
     </group>
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// CertificatesVault — 5 Refractive Slabs in 3D Gallery Arc
-// ─────────────────────────────────────────────────────────────────────────────
-
-export function CertificatesVault({ position = [0, 0, -2.5], certificates = [] }) {
+export function CertificatesVault({ position = [0, -0.4, -2.5], certificates = [] }) {
   const VAULT_OFFSETS = [
-    { x: 0.0,  y: 0.2, z: 0.0,  rotY: 0.00 }, // Center: AWS Cloud Practitioner
-    { x: 2.8,  y: 0.2, z: 0.4,  rotY: -0.26 }, // Right 1: IBM Applied DevOps
-    { x: 5.6,  y: 0.2, z: 1.2,  rotY: -0.48 }, // Right 2: Meta Advanced React
-    { x: -2.8, y: 0.2, z: 0.4,  rotY: 0.26 }, // Left 1: IBM Back-End Development
-    { x: -5.6, y: 0.2, z: 1.2,  rotY: 0.48 }, // Left 2: MERN Stack
+    { x: -3.6, y: 1.2, z: 0.4, rotY: 0.35 },
+    { x: -1.8, y: -0.6, z: -0.2, rotY: 0.18 },
+    { x: 0.0, y: 1.5, z: -0.6, rotY: 0.0 },
+    { x: 1.8, y: -0.6, z: -0.2, rotY: -0.18 },
+    { x: 3.6, y: 1.2, z: 0.4, rotY: -0.35 },
   ];
 
   return (
@@ -173,9 +198,9 @@ export function CertificatesVault({ position = [0, 0, -2.5], certificates = [] }
             key={idx}
             cert={cert}
             position={[cfg.x, cfg.y, cfg.z]}
+            vaultPosition={position}
             rotation={[0, cfg.rotY, 0]}
             scale={[0.85, 0.85, 0.85]}
-            worldOffset={position}
           />
         );
       })}
