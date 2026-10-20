@@ -12,7 +12,6 @@ import { SpaceBeacon } from './models/SpaceBeacon';
 import { RealisticCity } from './models/RealisticCity';
 import { CityScape } from './models/CityScape';
 import { ServerAisle } from './models/ServerAisle';
-import { ControlRoom } from './models/ControlRoom';
 import { GlowingConduit } from './models/GlowingConduit';
 import { useScrollProgress } from '../../context/ScrollContext';
 import { portfolioConfig } from '../../config/portfolio.config';
@@ -114,11 +113,10 @@ function SceneContent() {
         frames={1}
       />
 
-      {/* 5. Zone 1: Realistic Workstation (macbook.glb + studio_monitor.glb) + Hologram ControlRoom */}
+      {/* 5. Zone 1: Realistic Workstation (macbook.glb + studio_monitor.glb) Pristine Penthouse */}
       <ModelErrorBoundary fallback={null}>
         <Suspense fallback={null}>
           <InteractiveWorkstation position={[0, 0, 0]} />
-          <ControlRoom position={[-4.2, -1.2, -1.2]} wireframe={wireframeMode} />
         </Suspense>
       </ModelErrorBoundary>
 
@@ -127,14 +125,14 @@ function SceneContent() {
         <Suspense fallback={null}>
           <CertificatesVault
             certificates={portfolioConfig.certifications}
-            position={[0, -0.4, -2.5]}
+            position={[0, 0.4, -6.5]}
           />
-          <ServerAisle position={[0, -1.5, -4.5]} wireframe={wireframeMode} />
+          <ServerAisle position={[0, -1.4, -8.8]} wireframe={wireframeMode} />
           <GlowingConduit
             points={[
-              [-1.5, -0.8, 0],
-              [-2.8, -1.0, -5],
-              [-2.5, -0.5, -12],
+              [-2.5, -1.2, -4.5],
+              [-3.2, -1.0, -8.0],
+              [-2.8, -0.5, -13.0],
               [-1.8, 1.0, -18.5],
               [0, 0.2, -25],
             ]}
@@ -142,9 +140,9 @@ function SceneContent() {
           />
           <GlowingConduit
             points={[
-              [1.5, -0.8, 0],
-              [2.8, -1.0, -5],
-              [2.5, -0.5, -12],
+              [2.5, -1.2, -4.5],
+              [3.2, -1.0, -8.0],
+              [2.8, -0.5, -13.0],
               [1.8, 1.0, -18.5],
               [0, 0.2, -25],
             ]}
@@ -219,7 +217,7 @@ export function Scene() {
           stencil: false,
           depth: true,
         }}
-        camera={{ fov: 45, near: 0.1, far: 80, position: [0, 1.4, 5.2] }}
+        camera={{ fov: 42, near: 0.1, far: 80, position: [0, 1.7, 4.6] }}
       >
         <color attach="background" args={[bgColor]} />
         <fog attach="fog" args={[fogColor, 8, 38]} />

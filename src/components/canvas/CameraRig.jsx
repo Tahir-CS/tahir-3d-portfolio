@@ -9,30 +9,30 @@ import { useScrollProgress } from '../../context/ScrollContext';
 // ─────────────────────────────────────────────────────────────────────────────
 
 const CAMERA_POSITIONS = [
-  new THREE.Vector3(0, 1.4, 5.2),       // 0.00: Hero Studio (Workstation Overlook)
-  new THREE.Vector3(0, 2.0, 2.8),       // 0.12: Rising, framing MacBook + Studio Monitor
-  new THREE.Vector3(0, 1.05, 0.68),     // 0.22: Diving tight into MacBook Pro 3D screen
-  new THREE.Vector3(0, 0.2, -0.2),      // 0.32: Gliding through Refractive Certificate Vault
-  new THREE.Vector3(-2.6, 2.6, -5.5),   // 0.42: Flying through ServerAisle into City Avenue
-  new THREE.Vector3(0.0, 4.2, -9.2),    // 0.52: Approaching Times Square Mega-LED Billboards
-  new THREE.Vector3(-2.8, 3.8, -11.8),  // 0.62: Banking toward West Outdoor Billboard (Experience)
-  new THREE.Vector3(0.0, 5.8, -14.8),   // 0.72: Entering Project Skyscraper Canyon (Top Slabs)
-  new THREE.Vector3(-1.6, 2.6, -16.8),  // 0.82: Swooping past Mid Project Glass Monoliths
-  new THREE.Vector3(1.4, -0.4, -18.2),  // 0.90: Swooping past Lower Project Glass Monoliths
+  new THREE.Vector3(0, 1.7, 4.6),       // 0.00: Hero Penthouse (Pristine Workstation Framing)
+  new THREE.Vector3(0, 1.35, 2.6),      // 0.12: Smooth glide framing dual displays
+  new THREE.Vector3(0, 0.85, 0.85),     // 0.22: Diving tight into MacBook Pro terminal & code
+  new THREE.Vector3(0, 0.85, -3.2),     // 0.32: Gliding through Refractive Certificate Vault (Z=-6.5)
+  new THREE.Vector3(-1.8, 2.4, -6.5),   // 0.42: Flying through ServerAisle into City Avenue
+  new THREE.Vector3(0.0, 4.6, -9.0),    // 0.52: Approaching Grand Architectural Skills Mega-Billboard
+  new THREE.Vector3(-4.2, 4.2, -10.5),  // 0.62: Flanking West Skyscraper Outdoor Billboard (Experience)
+  new THREE.Vector3(0.0, 4.8, -8.2),    // 0.72: ZOOMED-OUT Vista of ALL 7 Project Glass Monoliths
+  new THREE.Vector3(0.0, 4.4, -9.0),    // 0.82: Expansive Zoomed-Out View of Project Amphitheater
+  new THREE.Vector3(0.8, 2.6, -15.5),   // 0.90: Sweeping descent through Project Gallery toward Summit
   new THREE.Vector3(0.0, 1.45, -22.4),  // 1.00: Locking onto Rooftop Summit Command Terminal
 ];
 
 const LOOKAT_TARGETS = [
-  new THREE.Vector3(0, 0.4, 0),         // 0.00: Desk center
-  new THREE.Vector3(0.4, 0.7, -0.2),    // 0.12: MacBook + Studio Monitor
-  new THREE.Vector3(0, 0.72, -0.92),    // 0.22: Directly into MacBook terminal code
-  new THREE.Vector3(0, -0.2, -2.8),     // 0.32: Certificate Acrylic Slabs
-  new THREE.Vector3(0, 2.2, -10.5),     // 0.42: Looking down Cyber City Avenue
-  new THREE.Vector3(0.0, 5.4, -14.5),   // 0.52: Central Skyscraper Mega-Billboard
-  new THREE.Vector3(-7.5, 3.7, -14.2),  // 0.62: West Skyscraper Outdoor Billboard (KICS Experience)
-  new THREE.Vector3(0.0, 4.2, -18.5),   // 0.72: Project Showcase Tower Top
-  new THREE.Vector3(-0.5, 1.8, -18.5),  // 0.82: Project Showcase Tower Mid
-  new THREE.Vector3(0.5, -1.2, -19.5),  // 0.90: Project Showcase Tower Base
+  new THREE.Vector3(0, 0.52, 0),        // 0.00: Hero Workstation Center
+  new THREE.Vector3(0.25, 0.55, -0.3),  // 0.12: Dual Displays
+  new THREE.Vector3(0, 0.52, -0.74),    // 0.22: Directly into MacBook terminal code
+  new THREE.Vector3(0, 0.4, -6.5),      // 0.32: Certificate Acrylic Slabs Gallery Arc
+  new THREE.Vector3(0, 2.0, -13.5),     // 0.42: Looking down Cyber City Avenue & Server Racks
+  new THREE.Vector3(0.0, 5.6, -13.8),   // 0.52: Central Skyscraper Grand Skills Mega-Billboard
+  new THREE.Vector3(-7.5, 4.2, -14.2),  // 0.62: West Skyscraper Outdoor Billboard (Experience & Education)
+  new THREE.Vector3(0.0, 1.5, -18.5),   // 0.72: Central Target of All 7 Projects Gallery Wall
+  new THREE.Vector3(0.0, 1.3, -18.5),   // 0.82: Full Panoramic View of All 7 Projects
+  new THREE.Vector3(0.0, 1.6, -21.5),   // 0.90: Transition to Terminal Summit
   new THREE.Vector3(0.0, 1.35, -25.0),  // 1.00: Rooftop Command Terminal Screen
 ];
 

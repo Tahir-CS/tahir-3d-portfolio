@@ -52,10 +52,10 @@ export function RealisticCity({ position = [0, -1.5, -15], scale = 0.16 }) {
     e?.stopPropagation();
     sound.playHoloEngage();
     setFocusedTarget({
-      title: 'SKYLINE MEGA-LED // SYSTEMS ARCHITECTURE',
-      sub: 'Click ESC to return to city flight',
-      pos: [0, 5.3, -9.2],
-      lookAt: [0, 5.3, -13.8],
+      title: 'SKYLINE MEGA-BILLBOARD // SYSTEMS & TECH STACK',
+      sub: 'All Core Engineering Pillars (Press ESC to return)',
+      pos: [0, 5.4, -9.2],
+      lookAt: [0, 5.4, -13.8],
     });
   };
 
@@ -63,10 +63,10 @@ export function RealisticCity({ position = [0, -1.5, -15], scale = 0.16 }) {
     e?.stopPropagation();
     sound.playHoloEngage();
     setFocusedTarget({
-      title: 'EAST TOWER // SLA & EDUCATION BENCHMARKS',
-      sub: 'UET Lahore BSCS // 99.999% Uptime Telemetry',
-      pos: [5.8, 4.1, -9.8],
-      lookAt: [8.2, 4.1, -13.0],
+      title: 'EAST TOWER // TELEMETRY & UPTIME',
+      sub: 'UET Lahore BSCS // 99.999% SLA (Press ESC to return)',
+      pos: [6.2, 4.4, -9.8],
+      lookAt: [8.2, 4.4, -13.0],
     });
   };
 
@@ -82,7 +82,7 @@ export function RealisticCity({ position = [0, -1.5, -15], scale = 0.16 }) {
 
       {/* 2. Giant Central Mega-Display Billboard (Click to fly up to it!) */}
       <group onClick={focusCentralBillboard}>
-        <BuildingScreens position={[0, 6.8, 1.2]} rotation={[0, 0, 0]} scale={0.155} />
+        <BuildingScreens position={[0, 6.2, 1.2]} rotation={[0, 0, 0]} scale={0.145} />
       </group>
 
       {/* 3. Real 3D Outdoor Billboard on West Skyscraper (outdoor_billboard.glb) with Live Experience Screen */}
@@ -94,10 +94,10 @@ export function RealisticCity({ position = [0, -1.5, -15], scale = 0.16 }) {
         onFocus={() => {
           sound.playHoloEngage();
           setFocusedTarget({
-            title: 'WEST SKYSCRAPER BILLBOARD // EXPERIENCE & PEDIGREE',
-            sub: 'KICS (UET Lahore) & Bano Qabil Engineering Record',
-            pos: [-4.2, 4.0, -10.5],
-            lookAt: [-7.5, 4.0, -14.2],
+            title: 'WEST SKYSCRAPER BILLBOARD // EXPERIENCE & EDUCATION',
+            sub: 'KICS (UET Lahore) & Bano Qabil Engineering (Press ESC to return)',
+            pos: [-4.6, 4.2, -10.5],
+            lookAt: [-7.5, 4.2, -14.2],
           });
         }}
       />
@@ -144,22 +144,42 @@ function RooftopOutdoorBillboard({ position, rotation, scale, isObsidian, onFocu
         onFocus?.();
       }}
     >
+      {/* Realistic Outdoor Billboard 3D Model */}
       <primitive object={clone} />
+
+      {/* Heavy Steel Support Legs & Concrete Roof Anchor Footings */}
+      {[-0.7, 0.7].map((lx, li) => (
+        <group key={li} position={[lx, -0.6, 0]}>
+          <mesh position={[0, 0.3, 0]}>
+            <cylinderGeometry args={[0.05, 0.05, 0.6, 8]} />
+            <meshStandardMaterial color={isObsidian ? '#181b24' : '#444'} metalness={0.9} />
+          </mesh>
+          <mesh position={[0, 0.04, 0]}>
+            <boxGeometry args={[0.26, 0.08, 0.26]} />
+            <meshStandardMaterial color={isObsidian ? '#222733' : '#666'} roughness={0.9} />
+          </mesh>
+        </group>
+      ))}
+
+      {/* Solid Screen Backing Bezel Plane */}
+      <mesh position={[0, 0.35, 0.1]}>
+        <planeGeometry args={[1.82, 1.12]} />
+        <meshBasicMaterial color={isObsidian ? '#05070d' : '#222'} />
+      </mesh>
 
       {/* Diegetic 3D Billboard Screen Mounted onto outdoor_billboard.glb */}
       <Html
         transform
-        distanceFactor={1.3}
-        position={[0, 0.35, 0.12]}
-        scale={0.11}
+        position={[0, 0.35, 0.11]}
+        scale={0.092}
         className="pointer-events-auto select-none"
       >
         <div
           onClick={onFocus}
           className={`w-[780px] h-[470px] rounded-xl border-4 p-6 shadow-2xl flex flex-col justify-between font-mono cursor-pointer transition-all ${
             isObsidian
-              ? 'bg-[#04070d]/95 border-emerald-400/70 text-white shadow-[0_0_70px_rgba(16,185,129,0.35)]'
-              : 'bg-[#faf7f2]/95 border-amber-700/70 text-neutral-900'
+              ? 'bg-[#04070d]/98 border-emerald-400/70 text-white shadow-[0_0_70px_rgba(16,185,129,0.35)]'
+              : 'bg-[#faf7f2]/98 border-amber-700/70 text-neutral-900'
           }`}
         >
           <div className="flex items-center justify-between border-b border-white/15 pb-3">
