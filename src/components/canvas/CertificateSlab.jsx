@@ -71,8 +71,8 @@ export function CertificateSlab({
     const worldZ = worldOffset[2] + position[2];
     setFocusedTarget({
       title: `CREDENTIAL // ${cert.title.toUpperCase()}`,
-      sub: `${cert.issuer || 'VERIFIED CREDENTIAL'} // ${cert.date || '2024'}`,
-      pos: [worldX, worldY, worldZ + 2.4],
+      sub: `${cert.issuer || 'VERIFIED CREDENTIAL'} // ${cert.date || '2024'} (Press ESC to return)`,
+      pos: [worldX, worldY, worldZ + 2.2],
       lookAt: [worldX, worldY, worldZ],
     });
   };
@@ -157,11 +157,11 @@ export function CertificateSlab({
 
 export function CertificatesVault({ position = [0, 0, -2.5], certificates = [] }) {
   const VAULT_OFFSETS = [
-    { x: -3.6, y: 1.2, z: 0.4, rotY: 0.35 },
-    { x: -1.8, y: -0.6, z: -0.2, rotY: 0.18 },
-    { x: 0.0, y: 1.5, z: -0.6, rotY: 0.0 },
-    { x: 1.8, y: -0.6, z: -0.2, rotY: -0.18 },
-    { x: 3.6, y: 1.2, z: 0.4, rotY: -0.35 },
+    { x: 0.0,  y: 0.2, z: 0.0,  rotY: 0.00 }, // Center: AWS Cloud Practitioner
+    { x: 2.8,  y: 0.2, z: 0.4,  rotY: -0.26 }, // Right 1: IBM Applied DevOps
+    { x: 5.6,  y: 0.2, z: 1.2,  rotY: -0.48 }, // Right 2: Meta Advanced React
+    { x: -2.8, y: 0.2, z: 0.4,  rotY: 0.26 }, // Left 1: IBM Back-End Development
+    { x: -5.6, y: 0.2, z: 1.2,  rotY: 0.48 }, // Left 2: MERN Stack
   ];
 
   return (

@@ -152,9 +152,16 @@ function SceneContent() {
       </ModelErrorBoundary>
 
       {/* 7. Zone 3: Authentic 3D Building City Block (allBuildings.glb + outdoor_billboard.glb + BuildingScreens) */}
-      <ModelErrorBoundary fallback={<CityScape position={[0, -1.5, -6]} />}>
-        <Suspense fallback={<CityScape position={[0, -1.5, -6]} />}>
+      <ModelErrorBoundary fallback={null}>
+        <Suspense fallback={null}>
           <RealisticCity position={[0, -1.5, -15]} />
+        </Suspense>
+      </ModelErrorBoundary>
+
+      {/* 7b. Real 3D Skyscraper City Metropolis (Surrounding towers with lit windows & spires) */}
+      <ModelErrorBoundary fallback={null}>
+        <Suspense fallback={null}>
+          <CityScape position={[0, -1.5, -8]} />
         </Suspense>
       </ModelErrorBoundary>
 

@@ -6,6 +6,7 @@ import { Navigation } from './components/ui/Navigation';
 import { SciFiHudFrame } from './components/ui/SciFiHudFrame';
 import { CyberCursor } from './components/ui/CyberCursor';
 import { LoadingScreen } from './components/ui/LoadingScreen';
+import { Diegetic3DControls } from './components/ui/Diegetic3DControls';
 import { ProjectModal } from './components/ui/ProjectModal';
 import { HeroOverlay } from './components/ui/HeroOverlay';
 import { AboutOverlay } from './components/ui/AboutOverlay';
@@ -40,6 +41,9 @@ function PortfolioWorld() {
 
       {/* 4. Master Fixed 3D WebGL World (macbook.glb, studio_monitor.glb, allBuildings.glb, outdoor_billboard.glb) */}
       <Scene />
+
+      {/* 4b. Diegetic 3D Interactive Controls for Certificates & Projects */}
+      <Diegetic3DControls />
 
       {/* 5. Floating 3D Focus Inspection Pill (Appears when zoomed into any 3D Billboard / Slab / Monitor) */}
       {focusedTarget && (

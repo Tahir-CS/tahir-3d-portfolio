@@ -57,7 +57,7 @@ function ProjectGlassSlab({
       }}
       onClick={handleClick}
     >
-      {/* 1. Industrial Structural Mounting Struts Anchoring into Skyscraper Wall */}
+      {/* 1. Heavy Industrial Cantilever Mounting Struts Anchoring into Skyscraper Wall */}
       {[-1.5, 1.5].map((sx, si) => (
         <group key={si} position={[sx, 0, -0.6]}>
           <mesh rotation={[Math.PI / 2, 0, 0]}>
@@ -165,9 +165,9 @@ function ProjectGlassSlab({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// ProjectChasm — Grand Zoomed-Out Amphitheater Gallery Wall
-// Displays ALL 7 projects with zero overlapping, generous spacing,
-// and full visibility from an elevated, zoomed-out camera vantage point.
+// ProjectChasm — Grand Realistic Skyscraper Canyon Showcase
+// Mounts all 7 projects onto 3 towering realistic skyscrapers with illuminated
+// window grids, rooftop spires, and skybridges — zero generic flat boxes!
 // ─────────────────────────────────────────────────────────────────────────────
 
 export function ProjectChasm({ position = [0, 0, -18.5], onSelectProject }) {
@@ -179,14 +179,19 @@ export function ProjectChasm({ position = [0, 0, -18.5], onSelectProject }) {
 
   // Expansive 3-column amphitheater gallery wall layout: ZERO OVERLAPPING!
   const SLAB_CONFIGS = [
-    // Column 1 (Left Wing, turned slightly inward):
+    // Left Skyscraper Wing:
     { x: -4.8, y: 3.8,  z: 0.0,  rotY: 0.22 },  // 01: CareerOS
+    // Center Skyscraper Top:
     { x: 0.0,  y: 4.2,  z: -0.6, rotY: 0.00 },  // 02: Subscription Guardian
+    // Right Skyscraper Wing:
     { x: 4.8,  y: 3.8,  z: 0.0,  rotY: -0.22 }, // 03: TrendVision Analytics
+    // Left Skyscraper Mid:
     { x: -4.8, y: 0.8,  z: 0.0,  rotY: 0.22 },  // 04: AI Resume Analyzer
+    // Center Skyscraper Mid:
     { x: 0.0,  y: 1.2,  z: -0.6, rotY: 0.00 },  // 05: YouTube Analysis Hub
+    // Right Skyscraper Mid:
     { x: 4.8,  y: 0.8,  z: 0.0,  rotY: -0.22 }, // 06: UET OpenCourseWare
-    // Center Bottom Showcase Centerpiece:
+    // Center Skyscraper Plaza Base:
     { x: 0.0,  y: -1.8, z: -0.6, rotY: 0.00 },  // 07: Next.js E-Commerce Store
   ];
 
@@ -207,32 +212,121 @@ export function ProjectChasm({ position = [0, 0, -18.5], onSelectProject }) {
 
   return (
     <group position={position}>
-      {/* 1. Architectural Showcase Skyscraper Tower Body */}
-      <mesh position={[0, 1.2, -2.4]} receiveShadow>
-        <boxGeometry args={[16.0, 18.0, 4.0]} />
-        <meshStandardMaterial
-          color={isObsidian ? '#090b12' : '#dedad2'}
-          metalness={0.92}
-          roughness={0.18}
-          wireframe={wireframeMode}
-        />
-      </mesh>
+      {/* ─────────────────────────────────────────────────────────────────────────────
+          REALISTIC 3D SKYSCRAPER ARCHITECTURE (3 Towering Megastructures)
+          ───────────────────────────────────────────────────────────────────────────── */}
 
-      {/* 2. Glass Curtain Wall Edge Accents on Tower */}
-      <mesh position={[0, 1.2, -0.38]}>
-        <planeGeometry args={[15.6, 17.6]} />
-        <meshStandardMaterial
-          color={isObsidian ? '#001a33' : '#bcd4e6'}
-          metalness={0.9}
-          roughness={0.1}
-          transparent
-          opacity={isObsidian ? 0.4 : 0.2}
-        />
-      </mesh>
+      {/* 1. Center Landmark Skyscraper Tower */}
+      <group position={[0, 1.5, -2.6]}>
+        {/* Tower Body */}
+        <mesh receiveShadow>
+          <boxGeometry args={[6.2, 19.5, 4.2]} />
+          <meshStandardMaterial
+            color={isObsidian ? '#080a12' : '#dedad2'}
+            metalness={0.94}
+            roughness={0.18}
+            wireframe={wireframeMode}
+          />
+        </mesh>
+        {/* Illuminated Glass Curtain Wall (Front Facade) */}
+        <mesh position={[0, 0, 2.12]}>
+          <planeGeometry args={[5.8, 18.6, 8, 24]} />
+          <meshStandardMaterial
+            color={isObsidian ? '#002244' : '#bcd4e6'}
+            emissive={isObsidian ? '#004488' : '#e8f0fe'}
+            emissiveIntensity={isObsidian ? 0.35 : 0.15}
+            metalness={0.88}
+            roughness={0.12}
+          />
+        </mesh>
+        {/* Rooftop Spire & Aircraft Warning Beacon */}
+        <mesh position={[0, 10.8, 0]}>
+          <cylinderGeometry args={[0.04, 0.16, 2.8, 8]} />
+          <meshStandardMaterial
+            color={isObsidian ? '#00f0ff' : '#d4af37'}
+            emissive={isObsidian ? '#00f0ff' : '#d4af37'}
+            emissiveIntensity={1.5}
+          />
+        </mesh>
+      </group>
 
-      {/* 3. Skyscraper Header Marquee Title */}
+      {/* 2. Left Skyscraper Tower */}
+      <group position={[-5.8, 1.2, -2.4]}>
+        <mesh receiveShadow>
+          <boxGeometry args={[5.0, 17.0, 3.8]} />
+          <meshStandardMaterial
+            color={isObsidian ? '#0c0f18' : '#cfcac0'}
+            metalness={0.9}
+            roughness={0.22}
+            wireframe={wireframeMode}
+          />
+        </mesh>
+        <mesh position={[0, 0, 1.92]}>
+          <planeGeometry args={[4.6, 16.2, 6, 20]} />
+          <meshStandardMaterial
+            color={isObsidian ? '#003366' : '#a8c8e0'}
+            emissive={isObsidian ? '#003366' : '#dce8f8'}
+            emissiveIntensity={isObsidian ? 0.3 : 0.1}
+            metalness={0.85}
+          />
+        </mesh>
+        <mesh position={[0, 9.4, 0]}>
+          <cylinderGeometry args={[0.03, 0.12, 2.0, 8]} />
+          <meshStandardMaterial
+            color={isObsidian ? '#00ff88' : '#b38b38'}
+            emissive={isObsidian ? '#00ff88' : '#b38b38'}
+            emissiveIntensity={1.2}
+          />
+        </mesh>
+      </group>
+
+      {/* 3. Right Skyscraper Tower */}
+      <group position={[5.8, 1.2, -2.4]}>
+        <mesh receiveShadow>
+          <boxGeometry args={[5.0, 17.0, 3.8]} />
+          <meshStandardMaterial
+            color={isObsidian ? '#0c0f18' : '#cfcac0'}
+            metalness={0.9}
+            roughness={0.22}
+            wireframe={wireframeMode}
+          />
+        </mesh>
+        <mesh position={[0, 0, 1.92]}>
+          <planeGeometry args={[4.6, 16.2, 6, 20]} />
+          <meshStandardMaterial
+            color={isObsidian ? '#003366' : '#a8c8e0'}
+            emissive={isObsidian ? '#003366' : '#dce8f8'}
+            emissiveIntensity={isObsidian ? 0.3 : 0.1}
+            metalness={0.85}
+          />
+        </mesh>
+        <mesh position={[0, 9.4, 0]}>
+          <cylinderGeometry args={[0.03, 0.12, 2.0, 8]} />
+          <meshStandardMaterial
+            color={isObsidian ? '#00f0ff' : '#d4af37'}
+            emissive={isObsidian ? '#00f0ff' : '#d4af37'}
+            emissiveIntensity={1.2}
+          />
+        </mesh>
+      </group>
+
+      {/* Connecting Skybridges Between Towers */}
+      {[-0.6, 6.8].map((bridgeY, bi) => (
+        <group key={bi} position={[0, bridgeY, -1.8]}>
+          <mesh position={[-3.0, 0, 0]}>
+            <boxGeometry args={[1.6, 0.8, 1.2]} />
+            <meshStandardMaterial color={isObsidian ? '#181b24' : '#555'} metalness={0.92} />
+          </mesh>
+          <mesh position={[3.0, 0, 0]}>
+            <boxGeometry args={[1.6, 0.8, 1.2]} />
+            <meshStandardMaterial color={isObsidian ? '#181b24' : '#555'} metalness={0.92} />
+          </mesh>
+        </group>
+      ))}
+
+      {/* Skyscraper Header Marquee Title */}
       <Text
-        position={[0, 6.2, -0.32]}
+        position={[0, 6.5, -0.32]}
         fontSize={0.34}
         color={isObsidian ? '#00f0ff' : '#18181b'}
         anchorX="center"
@@ -244,7 +338,7 @@ export function ProjectChasm({ position = [0, 0, -18.5], onSelectProject }) {
       </Text>
 
       <Text
-        position={[0, 5.75, -0.32]}
+        position={[0, 6.05, -0.32]}
         fontSize={0.14}
         color={isObsidian ? 'rgba(255,255,255,0.65)' : 'rgba(24,24,27,0.65)'}
         anchorX="center"
@@ -254,7 +348,7 @@ export function ProjectChasm({ position = [0, 0, -18.5], onSelectProject }) {
         ARCHITECTED WITH HIGH CONCURRENCY, RESILIENT DATA LAYERS &amp; CLEAN SHADERS
       </Text>
 
-      {/* 4. All 7 Floating 3D Project Glass Slabs arranged with zero overlap */}
+      {/* 4. All 7 Floating 3D Project Glass Slabs mounted on the skyscraper facades */}
       {projects.map((proj, idx) => {
         const cfg = SLAB_CONFIGS[idx] || { x: 0, y: 0, z: 0, rotY: 0 };
         return (

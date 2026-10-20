@@ -70,8 +70,8 @@ export function InteractiveWorkstation({ position = [0, 0, 0] }) {
           setFocusedTarget({
             title: 'MACBOOK PRO M3 // KERNEL ARCHITECTURE TERMINAL',
             sub: 'Interactive 3D Screen Locked (Press ESC to return)',
-            pos: [0, 0.58, 0.85],
-            lookAt: [0, 0.52, -0.74],
+            pos: [0, 0.82, 0.72],
+            lookAt: [0, 0.76, -0.96],
           });
         }}
       >
@@ -83,24 +83,18 @@ export function InteractiveWorkstation({ position = [0, 0, 0] }) {
         />
       </group>
 
-      {/* Screen Backing Bezel Plane to Prevent Clipping */}
-      <mesh position={[0, 0.52, -0.75]} rotation={[-0.22, 0, 0]}>
-        <planeGeometry args={[1.82, 1.18]} />
-        <meshBasicMaterial color={isObsidian ? '#05070a' : '#1a1815'} />
-      </mesh>
-
-      {/* In-World 3D Screen Interface (Pinned directly to the laptop display) */}
+      {/* In-World 3D Screen Interface (Pixel-perfect fit for the MacBook display) */}
       <Html
         transform
-        position={[0, 0.52, -0.74]}
-        rotation={[-0.22, 0, 0]}
-        scale={0.12}
+        position={[0, 0.78, -0.96]}
+        rotation={[-0.20, 0, 0]}
+        scale={0.115}
         className="pointer-events-auto select-none"
       >
         <div
-          className={`w-[580px] h-[370px] rounded-lg border p-4 shadow-2xl backdrop-blur-xl flex flex-col font-mono text-xs transition-colors duration-400 ${
+          className={`w-[680px] h-[430px] rounded-lg border-2 p-5 shadow-2xl backdrop-blur-xl flex flex-col justify-between font-mono text-xs transition-colors duration-400 ${
             isObsidian
-              ? 'bg-[#08090d]/98 border-cyan-500/30 text-neutral-200 shadow-cyan-500/10'
+              ? 'bg-[#06080e]/98 border-cyan-500/40 text-neutral-200 shadow-cyan-500/20'
               : 'bg-[#faf7f2]/98 border-amber-900/30 text-neutral-800 shadow-amber-900/10'
           }`}
         >
@@ -263,36 +257,30 @@ function StudioDisplay({ isObsidian, wireframeMode, setFocusedTarget }) {
 
   return (
     <group
-      position={[1.5, -0.4, -0.2]}
-      rotation={[0, -0.32, 0]}
+      position={[2.1, -0.4, -0.4]}
+      rotation={[0, -0.42, 0]}
       onClick={(e) => {
         e.stopPropagation();
         setFocusedTarget?.({
           title: 'STUDIO MONITOR // GRAFANA CLUSTER TELEMETRY',
           sub: '142K RPS // 99.999% Uptime (Press ESC to return)',
-          pos: [0.95, 0.42, 1.15],
-          lookAt: [1.5, 0.20, -0.2],
+          pos: [1.35, 0.42, 0.95],
+          lookAt: [2.1, 0.24, -0.4],
         });
       }}
     >
       {/* 3D Monitor Hardware */}
       <primitive object={clonedMonitor} scale={0.38} />
 
-      {/* Screen Backing Bezel Plane */}
-      <mesh position={[0, 0.60, 0.03]}>
-        <planeGeometry args={[1.14, 0.76]} />
-        <meshBasicMaterial color={isObsidian ? '#05070a' : '#1a1815'} />
-      </mesh>
-
       {/* Screen Interface Pinned on Display */}
       <Html
         transform
-        position={[0, 0.60, 0.04]}
-        scale={0.095}
+        position={[0, 0.64, 0.04]}
+        scale={0.082}
         className="pointer-events-auto select-none"
       >
         <div
-          className={`w-[460px] h-[300px] rounded-md border p-3.5 shadow-2xl flex flex-col justify-between font-mono text-[11px] ${
+          className={`w-[480px] h-[310px] rounded-md border p-3.5 shadow-2xl flex flex-col justify-between font-mono text-[11px] ${
             isObsidian
               ? 'bg-[#06080d]/98 border-cyan-500/40 text-neutral-200 shadow-cyan-500/20'
               : 'bg-[#faf7f2]/98 border-amber-900/30 text-neutral-800'
